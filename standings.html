@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>グループ順位表・決勝トーナメント｜PITCH26</title>
+<meta name="description" content="2026年W杯 全12グループの順位表と決勝トーナメント表。48チームのグループステージを確認。">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .lead{font-size:13.5px;color:var(--muted);max-width:680px;line-height:1.8;margin:0 0 6px}
+  .teams-link{display:inline-flex;margin:10px 0 4px}
+  .grid12{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin:18px 0;font-size:12px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:7px}
+  .legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+  .lg-q1{background:var(--mint)}.lg-q2{background:var(--blue)}.lg-q3{background:var(--accent)}
+  .lg-out{background:transparent;border:1px solid var(--faint)}
+  /* knockout tabs */
+  .ko-tabs{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:4px;margin-bottom:18px}
+  .ko-tab{padding:7px 16px;border-radius:99px;background:none;border:none;color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+  .ko-tab.on{background:var(--accent);color:var(--accent-ink)}
+  .ko-view{display:none}.ko-view.on{display:block}
+  /* bracket (組み合わせ表) */
+  .bracket{display:flex;gap:0;overflow-x:auto;padding-bottom:14px}
+  .bcol{flex:0 0 188px;display:flex;flex-direction:column;justify-content:space-around;gap:10px;padding:0 8px;position:relative}
+  .bcol-head{position:sticky;top:0;text-align:center;font-family:"Saira Condensed";font-weight:800;letter-spacing:.08em;font-size:12px;color:var(--accent);margin-bottom:6px}
+  .bslot{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:12px;transition:.15s}
+  .bslot:hover{border-color:var(--line-2)}
+  .bslot.fin{border-color:rgba(255,180,46,.45);background:linear-gradient(120deg,rgba(255,180,46,.12),var(--surface))}
+  .bslot .row{display:flex;align-items:center;justify-content:space-between;gap:6px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bslot .row + .row{margin-top:5px;padding-top:5px;border-top:1px solid var(--line)}
+  .bslot .meta{font-size:9.5px;color:var(--faint);margin-top:6px;text-align:center}
+  .bcol.connect .bslot{position:relative}
+  .bcol.connect .bslot::after{content:"";position:absolute;right:-8px;top:50%;width:8px;height:1px;background:var(--line-2)}
+  .bracket-hint{font-size:11.5px;color:var(--faint);margin-bottom:10px}
+  .note{font-size:12.5px;color:var(--muted);line-height:1.85;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:6px}
+  .ko-round{margin-bottom:20px}
+  .ko-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .ko-head .rt{font-family:"Saira Condensed";font-weight:800;letter-spacing:.12em;font-size:14px;color:var(--accent)}
+  .ko-head .rn{font-size:12px;color:var(--muted)}
+  .ko-head .cnt{font-size:11px;color:var(--faint);margin-left:auto}
+  .ko-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .ko-match{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:13px;transition:.15s}
+  .ko-match:hover{border-color:var(--line-2)}
+  .ko-match.final{border-color:rgba(255,180,46,.4);background:linear-gradient(120deg,rgba(255,180,46,.10),var(--surface))}
+  .ko-when{font-size:10.5px;color:var(--faint);flex:none;width:108px}
+  .ko-teams{display:flex;align-items:center;gap:7px;font-weight:700}
+  .ko-teams .vs{font-family:"Space Mono";font-size:11px;color:var(--faint)}
+  @media(max-width:760px){.grid12,.ko-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="chrome-header"></div>
+
+<main class="wrap">
+  <div class="page-head"><span class="kicker">STANDINGS</span><h1>順位表</h1><p class="sub">グループステージ · 開幕前</p></div>
+  <p class="lead">各グループ上位2チームが決勝トーナメントに進出。さらに3位のうち成績上位8チームも進出できる、48カ国の新方式です。</p>
+  <a href="#teams" class="teams-link"><span class="btn ghost">🌍 出場48か国を順位表で見る ↓</span></a>
+
+  <div class="legend">
+    <span><i class="lg-q1"></i>グループ1位 — 決勝T進出</span>
+    <span><i class="lg-q2"></i>グループ2位 — 決勝T進出</span>
+    <span><i class="lg-q3"></i>3位 — 上位8チームが進出</span>
+    <span><i class="lg-out"></i>敗退</span>
+  </div>
+
+  <div class="grid12" id="groups"></div>
+  <div id="lastup" style="font-size:11.5px;color:var(--faint);margin:4px 0 0;text-align:right"></div>
+
+  <div class="note">2026年W杯は48カ国出場の新方式。各グループ上位2チームが自動でラウンド32に進出し、加えて12グループの3位のうち成績上位8チームも勝ち上がれます。勝ち点は勝利3・引き分け1・敗戦0。同勝ち点の場合は得失点差→総得点→直接対決の順で順位を決定します。</div>
+
+  <div class="sec-head"><span class="kicker">KNOCKOUT</span><h2>決勝トーナメント</h2><div class="line"></div></div>
+  <div class="ko-tabs" id="ko-tabs">
+    <button class="ko-tab on" data-v="list">試合一覧</button>
+    <button class="ko-tab" data-v="bracket">組み合わせ表</button>
+  </div>
+  <div class="ko-view on" id="ko-list"></div>
+  <div class="ko-view" id="ko-bracket"></div>
+
+  <section id="howto"></section>
+</main>
+
+<div id="chrome-footer"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+  buildChrome("standings");
+
+  // 12グループ（ライブ反映）
+  function render(){
+    let html="";
+    for(const g of Object.keys(GROUPS)){ html+=standingsTable(g); }
+    document.getElementById("groups").innerHTML=`<div style="display:contents" id="teams"></div>`+html;
+    if(LIVE_UPDATED){
+      const t=new Date(LIVE_UPDATED).toLocaleString("ja-JP",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"});
+      document.getElementById("lastup").textContent="最終更新 "+t;
+    }
+  }
+  bootstrap(render);
+
+  // 決勝T: 試合一覧ビュー
+  (function(){
+    let html="";
+    const shortN={"ラウンド32":"ROUND 32","ラウンド16":"ROUND 16","準々決勝":"QF","準決勝":"SF","3位決定戦":"3RD","決勝":"FINAL"};
+    for(const [round,list] of Object.entries(KO)){
+      const isFinal=round==="決勝";
+      const cells=list.map(m=>{
+        return `<a class="ko-match${isFinal?' final':''}" href="#">
+          <span class="ko-when">${m.d} ${m.time}<br>${m.v}</span>
+          <span class="ko-teams">${m.a}<span class="vs">vs</span>${m.b}${isFinal?' 🏆':''}</span></a>`;
+      }).join("");
+      html+=`<div class="ko-round"><div class="ko-head"><span class="rt">${shortN[round]}</span><span class="rn">${round}</span><span class="cnt">${list.length}試合</span></div><div class="ko-grid">${cells}</div></div>`;
+    }
+    document.getElementById("ko-list").innerHTML=html;
+  })();
+
+  // 決勝T: 組み合わせ表（ブラケット）ビュー
+  (function(){
+    const cols=[
+      ["ROUND 32",KO["ラウンド32"]],
+      ["ROUND 16",KO["ラウンド16"]],
+      ["QF",KO["準々決勝"]],
+      ["SF",KO["準決勝"]],
+      ["FINAL",KO["決勝"]],
+    ];
+    const slot=(m,fin)=>`<div class="bslot${fin?' fin':''}">
+        <div class="row"><span>${m.a}</span></div>
+        <div class="row"><span>${m.b}${fin?' 🏆':''}</span></div>
+        <div class="meta">${m.d} ${m.time} · ${m.v}</div></div>`;
+    let html='<p class="bracket-hint">← 横スクロールでラウンド32〜決勝まで →</p><div class="bracket">';
+    cols.forEach(([name,list],ci)=>{
+      const connect = ci<cols.length-1 ? ' connect' : '';
+      const slots=list.map(m=>slot(m,name==="FINAL")).join("");
+      html+=`<div class="bcol${connect}"><div class="bcol-head">${name}</div>${slots}</div>`;
+    });
+    html+='</div>';
+    // 3位決定戦
+    const t=KO["3位決定戦"][0];
+    html+=`<div style="margin-top:14px"><div class="ko-head"><span class="rt">3RD</span><span class="rn">3位決定戦</span></div>
+      <div class="ko-grid"><a class="ko-match" href="#"><span class="ko-when">${t.d} ${t.time}<br>${t.v}</span><span class="ko-teams">${t.a}<span class="vs">vs</span>${t.b}</span></a></div></div>`;
+    document.getElementById("ko-bracket").innerHTML=html;
+  })();
+
+  // タブ切り替え
+  document.querySelectorAll("#ko-tabs .ko-tab").forEach(btn=>btn.onclick=()=>{
+    document.querySelectorAll("#ko-tabs .ko-tab").forEach(b=>b.classList.toggle("on",b===btn));
+    document.getElementById("ko-list").classList.toggle("on",btn.dataset.v==="list");
+    document.getElementById("ko-bracket").classList.toggle("on",btn.dataset.v==="bracket");
+  });
+
+  document.getElementById("howto").innerHTML=howToWatch();
+</script>
+</body>
+</html>
