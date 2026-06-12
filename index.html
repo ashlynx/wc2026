@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PITCH26｜2026W杯 日程・放送・順位ガイド</title>
+<meta name="description" content="2026 FIFAワールドカップ 日本語ガイド。全試合日程（日本時間）・放送/配信・日本代表・グループ順位を一覧。">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .hero{padding:34px 0 6px}
+  .eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .eyebrow .tag{font-family:"Saira Condensed";font-weight:800;font-size:13px;letter-spacing:.18em;color:var(--accent-ink);background:var(--accent);padding:3px 10px;border-radius:6px}
+  .eyebrow .sub{font-size:12.5px;color:var(--muted)}
+  .ticket{position:relative;overflow:hidden;border-radius:24px;background:radial-gradient(700px 240px at 50% -40%, rgba(255,180,46,.22), transparent 70%),linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line-2);box-shadow:var(--shadow)}
+  .ticket::before,.ticket::after{content:"";position:absolute;top:-40%;width:160px;height:200%;background:linear-gradient(180deg,rgba(255,180,46,.16),transparent 70%);filter:blur(14px);pointer-events:none}
+  .ticket::before{left:10%;transform:rotate(12deg)} .ticket::after{right:10%;transform:rotate(-12deg)}
+  .ticket-grid{position:relative;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:18px;padding:30px 30px 24px}
+  .team{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}.team.right{order:3}
+  .team .flag{width:78px;height:78px;border-radius:50%;object-fit:cover;border:2px solid var(--line-2);box-shadow:0 8px 22px -10px rgba(0,0,0,.8)}
+  .team .name{font-weight:900;font-size:19px}.team .rank{font-size:11px;color:var(--faint);font-family:"Space Mono"}.team.jp .name{color:var(--rose)}
+  .center{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:148px}
+  .kick-date{font-size:12px;color:var(--muted)}.kick-time{font-family:"Saira Condensed";font-weight:800;font-size:56px;line-height:.9}
+  .kick-jst{font-size:11px;color:var(--accent);letter-spacing:.16em;font-weight:700}.kick-local{font-size:11px;color:var(--faint)}
+  .ticket-foot{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:16px 30px;border-top:1px dashed var(--line-2)}
+  .where{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+  .ticket-foot .chips{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;align-items:center}
+  .detail-link{font-weight:700;font-size:13.5px;color:var(--accent)}
+  .cd{display:flex;justify-content:center;gap:10px;margin:18px 0 4px;flex-wrap:wrap}
+  .cd .unit{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 16px;text-align:center;min-width:72px}
+  .cd .unit b{display:block;font-family:"Saira Condensed";font-weight:800;font-size:30px;color:var(--accent)}
+  .cd .unit span{font-size:10px;color:var(--muted);letter-spacing:.14em}
+  .seemore{display:flex;justify-content:center;margin-top:6px}
+  @media(max-width:820px){.kick-time{font-size:46px}.team .flag{width:62px;height:62px}.ticket-grid{padding:24px 18px 20px;gap:10px}}
+</style>
+</head>
+<body>
+<div id="chrome-header"></div>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow"><span class="tag">NEXT MATCH</span><span class="sub">グループF・第1戦 ／ 日本代表の初戦</span></div>
+    <div class="ticket">
+      <div class="ticket-grid">
+        <div class="team jp"><img class="flag" src="https://flagcdn.com/jp.svg" alt="日本"><div><div class="name">日本</div><div class="rank">FIFA 18位</div></div></div>
+        <div class="center"><div class="kick-date">6月15日(月)</div><div class="kick-time">05:00</div><div class="kick-jst">日本時間 (JST)</div><div class="kick-local">現地 6/14(日) 15:00</div></div>
+        <div class="team right"><img class="flag" src="https://flagcdn.com/nl.svg" alt="オランダ"><div><div class="name">オランダ</div><div class="rank">FIFA 7位</div></div></div>
+      </div>
+      <div class="ticket-foot">
+        <span class="where">📍 ダラス・AT&Tスタジアム</span>
+        <div class="chips"><span class="chip free">DAZN 無料</span><span class="chip">NHK BS</span><span class="chip">BSP4K</span><a href="japan.html" class="detail-link">詳細 →</a></div>
+      </div>
+    </div>
+    <div class="cd"><div class="unit"><b id="cd-d">--</b><span>DAYS</span></div><div class="unit"><b id="cd-h">--</b><span>HOURS</span></div><div class="unit"><b id="cd-m">--</b><span>MINUTES</span></div><div class="unit"><b id="cd-s">--</b><span>SECONDS</span></div></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="kicker">UP NEXT</span><h2>近日の試合</h2><div class="line"></div></div>
+    <div id="upnext"></div>
+    <div class="seemore"><a href="schedule.html" class="btn ghost">全104試合の日程を見る →</a></div>
+  </section>
+
+  <section id="howto"></section>
+
+  <section>
+    <div class="sec-head"><span class="kicker">GROUP F</span><h2>日本のグループ</h2><div class="line"></div></div>
+    <div id="groupF"></div>
+    <div class="seemore"><a href="standings.html" class="btn ghost">全12グループの順位表を見る →</a></div>
+  </section>
+</main>
+
+<div id="chrome-footer"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+  buildChrome("top");
+  startCountdown(KICKOFF);
+  document.getElementById("howto").innerHTML=howToWatch();
+
+  function render(){
+    // 近日の試合: 先頭から3日分 + 途中にPR
+    const days=[...new Set(MATCHES.map(m=>m.d))].slice(0,3);
+    let html="";
+    days.forEach((d,di)=>{
+      const list=MATCHES.filter(m=>m.d===d);
+      const w=list[0].w;
+      html+=`<div class="daygroup"><div class="dayhead"><div class="daydate">${d}<small>${w}曜</small></div>${di===0?'<span class="nextflag">NEXT</span>':''}<span class="daycount">${list.length}試合</span></div>`;
+      list.forEach((m,i)=>{html+=matchRow(m); if(di===1&&i===0) html+=prCard();});
+      html+=`</div>`;
+    });
+    document.getElementById("upnext").innerHTML=html;
+    // グループF 順位表（ライブ反映）
+    document.getElementById("groupF").innerHTML=standingsTable("F");
+  }
+  bootstrap(render);
+</script>
+</body>
+</html>

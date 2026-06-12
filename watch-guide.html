@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>視聴プラン診断｜PITCH26</title>
+<meta name="description" content="最大5問に答えるだけで、あなたに最適なW杯2026の視聴プランがわかります。DAZN・NHK・民放を比較。">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .lp{position:relative;overflow:hidden;border-radius:24px;margin:18px 0;padding:48px 30px;text-align:center;
+    background:radial-gradient(700px 260px at 50% -30%, rgba(70,227,190,.18), transparent 70%),linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line-2);box-shadow:var(--shadow)}
+  .lp .auto{display:inline-flex;align-items:center;gap:8px;font-family:"Saira Condensed";font-weight:800;letter-spacing:.18em;font-size:12px;color:var(--mint);margin-bottom:14px}
+  .lp .auto::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint)}
+  .lp h1{font-size:34px;font-weight:900;margin:0 0 12px;line-height:1.35}
+  .lp h1 .hl{color:var(--accent)}
+  .lp .desc{font-size:14px;color:var(--muted);margin:0 auto 26px;max-width:440px}
+  .lp .stats{display:flex;justify-content:center;gap:28px;margin-bottom:28px}
+  .lp .stat b{display:block;font-family:"Saira Condensed";font-weight:800;font-size:34px;color:var(--ink)}
+  .lp .stat span{font-size:11px;color:var(--muted);letter-spacing:.1em}
+  .lp .start{font-size:15px;padding:13px 30px}
+
+  .quiz{max-width:640px;margin:18px auto;border-radius:22px;border:1px solid var(--line-2);padding:30px;
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:var(--shadow);display:none}
+  .quiz.show{display:block}
+  .q-prog{display:flex;gap:6px;margin-bottom:20px}
+  .q-prog i{flex:1;height:4px;border-radius:99px;background:var(--surface-3)}
+  .q-prog i.on{background:var(--mint)}
+  .q-no{font-family:"Saira Condensed";font-weight:800;color:var(--mint);font-size:13px;letter-spacing:.16em;display:block;margin-bottom:8px}
+  .q-q{font-size:21px;font-weight:900;margin:0 0 20px}
+  .q-opts{display:flex;flex-direction:column;gap:10px}
+  .q-opt{display:flex;align-items:center;gap:13px;width:100%;text-align:left;cursor:pointer;padding:15px 17px;border-radius:13px;background:var(--surface-3);border:1px solid var(--line);color:var(--ink);font-size:15px;font-weight:700;font-family:inherit;transition:.16s}
+  .q-opt:hover{border-color:var(--mint);transform:translateX(3px)}
+  .q-opt .ico{font-size:21px;flex:none}
+  .q-back{margin-top:18px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit}
+  .q-back:hover{color:var(--ink)}
+
+  .result{text-align:center}
+  .result .rlabel{font-family:"Saira Condensed";font-weight:800;letter-spacing:.18em;color:var(--mint);font-size:12px}
+  .result .rname{font-family:"Saira Condensed";font-weight:800;font-size:40px;margin:10px 0 4px;color:var(--accent);line-height:1.05}
+  .result .rprice{font-size:14px;color:var(--ink);font-weight:700;margin-bottom:12px}
+  .result .rdesc{font-size:14px;color:var(--muted);max-width:460px;margin:0 auto 16px;line-height:1.8}
+  .result .rchips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+  .result .ractions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  @media(max-width:560px){.lp .stats{gap:18px}.lp h1{font-size:26px}.result .rname{font-size:32px}}
+</style>
+</head>
+<body>
+<div id="chrome-header"></div>
+
+<main class="wrap">
+  <div class="lp" id="lp">
+    <div class="auto">WC2026 — 視聴プラン診断</div>
+    <h1>あなたにぴったりの<br><span class="hl">W杯視聴プラン</span>を診断</h1>
+    <p class="desc">最大5問の質問に答えると、おすすめのサービスと料金感がわかります。</p>
+    <div class="stats">
+      <div class="stat"><b>5</b><span>質問</span></div>
+      <div class="stat"><b>6</b><span>プラン</span></div>
+      <div class="stat"><b>60s</b><span>で完了</span></div>
+    </div>
+    <button class="btn start" id="startBtn">診断をはじめる →</button>
+  </div>
+
+  <div class="quiz" id="quiz">
+    <div class="q-prog" id="qprog"></div>
+    <div id="qbody"></div>
+  </div>
+</main>
+
+<div id="chrome-footer"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+  buildChrome("watch");
+
+  // 質問（最大5問）。各選択肢は各プランへ加点。
+  const PLANS = {
+    nhk:   {name:"NHK・民放（無料）", price:"月額 0円", desc:"日本戦・開幕戦・決勝など注目試合は地上波/BSの無料中継でカバー。まずはお金をかけずに楽しみたい人向け。", chips:['<span class="chip">NHK</span>','<span class="chip">日テレ</span>','<span class="chip free">無料</span>']},
+    daznFree:{name:"DAZN 無料枠", price:"一部無料", desc:"日本戦など一部試合をDAZNの無料配信で。スマホ中心で代表戦だけ押さえたい人に。", chips:['<span class="chip dazn">DAZN</span>','<span class="chip free">無料</span>']},
+    soccer:{name:"DAZN SOCCER", price:"サッカー特化・割安", desc:"サッカーに絞った廉価プラン。W杯を含むサッカーをコスパよく追いたい人向け。", chips:['<span class="chip dazn">DAZN SOCCER</span>','<span class="chip">割安</span>']},
+    std:   {name:"DAZN Standard", price:"月額制・全104試合", desc:"全試合ライブ＋見逃しをフルでカバー。1試合も逃したくない本気の観戦派に。", chips:['<span class="chip dazn">DAZN Standard</span>','<span class="chip">全104試合</span>']},
+    annual:{name:"DAZN 年間プラン", price:"年契約・月換算が最安", desc:"大会後もずっと観るなら年間契約が月あたり最安。長く使う前提のヘビーユーザー向け。", chips:['<span class="chip dazn">DAZN 年間</span>','<span class="chip">最安/月</span>']},
+    dmm:   {name:"DMM × DAZN", price:"セット割", desc:"DMM関連サービスと合わせて使うとお得なセットプラン。すでにDMMを使っている人に。", chips:['<span class="chip dazn">DMM×DAZN</span>','<span class="chip">セット割</span>']},
+  };
+
+  const QUESTIONS = [
+    {no:"Q1 / 5", q:"どこまで観たい？", opts:[
+      {ico:"🏆",label:"全104試合フルで",s:{std:3,annual:2,soccer:1}},
+      {ico:"🇯🇵",label:"日本代表を中心に",s:{daznFree:2,nhk:2,soccer:1}},
+      {ico:"🔥",label:"注目カードだけ",s:{nhk:2,daznFree:1,soccer:1}},
+    ]},
+    {no:"Q2 / 5", q:"料金感は？", opts:[
+      {ico:"🆓",label:"できれば無料で",s:{nhk:3,daznFree:2}},
+      {ico:"⚖️",label:"コスパ重視",s:{soccer:3,dmm:1,annual:1}},
+      {ico:"✨",label:"質優先（課金OK）",s:{std:3,annual:1}},
+    ]},
+    {no:"Q3 / 5", q:"主にどこで観る？", opts:[
+      {ico:"📱",label:"スマホ・PC",s:{daznFree:2,soccer:1,std:1}},
+      {ico:"📺",label:"テレビの大画面",s:{std:2,nhk:2,annual:1}},
+      {ico:"🔀",label:"どちらも使う",s:{std:1,soccer:1,dmm:1}},
+    ]},
+    {no:"Q4 / 5", q:"W杯のあとも観る？", opts:[
+      {ico:"⚽",label:"サッカーを継続して観る",s:{annual:3,soccer:2,std:1}},
+      {ico:"🎯",label:"W杯期間だけでいい",s:{daznFree:2,nhk:2,std:1}},
+    ]},
+    {no:"Q5 / 5", q:"DMM系サービスは使ってる？", opts:[
+      {ico:"🟢",label:"使っている／興味あり",s:{dmm:4}},
+      {ico:"⚪",label:"特に使っていない",s:{std:1,soccer:1,nhk:1}},
+    ]},
+  ];
+
+  const lp=document.getElementById("lp"), quiz=document.getElementById("quiz");
+  const qbody=document.getElementById("qbody"), qprog=document.getElementById("qprog");
+  qprog.innerHTML=QUESTIONS.map(()=>'<i></i>').join("");
+  let step=0; const scores={};
+
+  document.getElementById("startBtn").onclick=()=>{lp.style.display="none";quiz.classList.add("show");step=0;for(const k in scores)delete scores[k];renderQ();window.scrollTo({top:0,behavior:"smooth"});};
+
+  function setProg(n){qprog.querySelectorAll("i").forEach((el,i)=>el.classList.toggle("on",i<n));}
+
+  function renderQ(){
+    const q=QUESTIONS[step]; setProg(step+1);
+    qbody.innerHTML=`<span class="q-no">${q.no}</span><p class="q-q">${q.q}</p>
+      <div class="q-opts">${q.opts.map((o,i)=>`<button class="q-opt" data-i="${i}"><span class="ico">${o.ico}</span>${o.label}</button>`).join("")}</div>
+      ${step>0?'<button class="q-back" id="qback">← 前の質問へ</button>':''}`;
+    qbody.querySelectorAll(".q-opt").forEach(b=>b.onclick=()=>{
+      const s=q.opts[b.dataset.i].s;
+      for(const k in s) scores[k]=(scores[k]||0)+s[k];
+      q._picked=b.dataset.i;
+      step++;
+      if(step>=QUESTIONS.length) renderResult(); else renderQ();
+    });
+    const back=document.getElementById("qback"); if(back) back.onclick=()=>{step--;renderQ();};
+  }
+
+  function renderResult(){
+    setProg(QUESTIONS.length);
+    let best=null,bestV=-1;
+    for(const k in PLANS){const v=scores[k]||0; if(v>bestV){bestV=v;best=k;}}
+    const r=PLANS[best];
+    qbody.innerHTML=`<div class="result">
+      <div class="rlabel">YOUR PLAN</div>
+      <div class="rname">${r.name}</div>
+      <div class="rprice">${r.price}</div>
+      <p class="rdesc">${r.desc}</p>
+      <div class="rchips">${r.chips.join("")}</div>
+      <div class="ractions">
+        <a href="#" class="btn">公式サイトで確認（PR）</a>
+        <button class="btn ghost" id="again">もう一度診断</button>
+        <a href="schedule.html" class="btn ghost">日程を見る</a>
+      </div></div>`;
+    document.getElementById("again").onclick=()=>{step=0;for(const k in scores)delete scores[k];renderQ();};
+  }
+</script>
+</body>
+</html>

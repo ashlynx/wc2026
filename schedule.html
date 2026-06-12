@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>全試合日程・放送局一覧｜PITCH26</title>
+<meta name="description" content="2026年W杯 全104試合の日程（日本時間）と放送局を一覧。DAZN・NHK・民放の視聴情報も。グループステージから決勝まで。">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .filters{position:sticky;top:64px;z-index:30;background:rgba(12,17,48,.92);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:14px;padding:14px;margin:8px 0 22px}
+  .frow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .frow + .frow{margin-top:10px}
+  .flabel{font-size:11px;color:var(--faint);letter-spacing:.1em;font-weight:700;margin-right:2px;flex:none}
+  .fbtn{padding:6px 12px;border-radius:99px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+  .fbtn:hover{color:var(--ink)}
+  .fbtn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .empty{text-align:center;color:var(--muted);padding:40px 0;font-size:14px}
+</style>
+</head>
+<body>
+<div id="chrome-header"></div>
+
+<main class="wrap">
+  <div class="page-head"><span class="kicker">FIXTURES</span><h1>全試合日程</h1><p class="sub">全104試合 · 日本時間表示</p></div>
+
+  <div class="filters">
+    <div class="frow" id="tv-filter"><span class="flabel">放送局</span></div>
+    <div class="frow" id="jp-filter"><span class="flabel">対象</span></div>
+  </div>
+
+  <div id="sched"></div>
+  <section id="howto"></section>
+</main>
+
+<div id="chrome-footer"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+  buildChrome("schedule");
+
+  const TVS=["すべて","無料","DAZN","NHK","日テレ","フジ","BSP4K"];
+  const JPS=["すべての試合","日本代表のみ"];
+  let fTv="すべて", fJp="すべての試合";
+
+  function chipBar(id,arr,cur,on){
+    document.getElementById(id).insertAdjacentHTML("beforeend",
+      arr.map(x=>`<button class="fbtn${x===cur?' on':''}" data-v="${x}">${x}</button>`).join(""));
+    document.getElementById(id).querySelectorAll(".fbtn").forEach(b=>b.onclick=()=>on(b.dataset.v));
+  }
+  chipBar("tv-filter",TVS,fTv,v=>{fTv=v;render();});
+  chipBar("jp-filter",JPS,fJp,v=>{fJp=v;render();});
+
+  function pass(m){
+    if(fJp==="日本代表のみ" && !m.jp) return false;
+    if(fTv==="すべて") return true;
+    return (m.tv||[]).includes(fTv);
+  }
+
+  function render(){
+    document.querySelectorAll("#tv-filter .fbtn").forEach(b=>b.classList.toggle("on",b.dataset.v===fTv));
+    document.querySelectorAll("#jp-filter .fbtn").forEach(b=>b.classList.toggle("on",b.dataset.v===fJp));
+
+    const sel=MATCHES.filter(pass);
+    let html="";
+    const days=[...new Set(sel.map(m=>m.d))];
+    days.forEach((d,di)=>{
+      const list=sel.filter(m=>m.d===d);
+      html+=`<div class="daygroup"><div class="dayhead"><div class="daydate">${d}<small>${list[0].w}曜</small></div>${di===0?'<span class="nextflag">NEXT</span>':''}<span class="daycount">${list.length}試合</span></div>`;
+      list.forEach((m,i)=>{html+=matchRow(m); if(fTv==="すべて"&&fJp==="すべての試合"&&list.length>=4&&i===2) html+=prCard();});
+      html+=`</div>`;
+    });
+
+    // 決勝トーナメント（フィルタ無効時のみ表示）
+    if(fTv==="すべて"&&fJp==="すべての試合"){
+      html+=`<div class="sec-head"><span class="kicker">KNOCKOUT</span><h2>決勝トーナメント</h2><div class="line"></div></div>`;
+      for(const [round,list] of Object.entries(KO)){
+        html+=`<div class="daygroup"><div class="dayhead"><span class="roundtag">${round}</span><span class="daycount">${list.length}試合</span></div>`;
+        list.forEach(m=>html+=matchRow({...m,tv:m.tv||["DAZN"]}));
+        html+=`</div>`;
+      }
+    }
+
+    if(!sel.length) html=`<div class="empty">該当する試合がありません。フィルターを変えてください。</div>`;
+    document.getElementById("sched").innerHTML=html;
+  }
+  bootstrap(render);
+  document.getElementById("howto").innerHTML=howToWatch();
+</script>
+</body>
+</html>
