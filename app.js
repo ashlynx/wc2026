@@ -65,7 +65,7 @@ const EN2JP = {
   "Sweden":"スウェーデン","Tunisia":"チュニジア"
 };
 const toJp = en => EN2JP[en] || en;
-const grpLetter = g => g ? g.replace("GROUP_","") : null;
+const grpLetter = g => g ? g.replace(/^group[_\s]*/i,"").trim().toUpperCase() : null;
 
 function applyLiveScores(scores){
   (scores||[]).forEach(sc=>{

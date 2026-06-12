@@ -72,7 +72,7 @@ def transform_standings(raw):
             })
         if ONLY_STARTED_GROUPS and not any((t.get("played") or 0) > 0 for t in table):
             continue
-        groups.append({"group": g.get("group"), "teams": table})
+        groups.append({"group": (g.get("group") or "").upper().replace(" ","_"), "teams": table})
     return groups
 
 
