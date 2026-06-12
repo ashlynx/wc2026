@@ -87,7 +87,7 @@
       const list=MATCHES.filter(m=>m.d===d);
       const w=list[0].w;
       html+=`<div class="daygroup"><div class="dayhead"><div class="daydate">${d}<small>${w}曜</small></div>${di===0?'<span class="nextflag">NEXT</span>':''}<span class="daycount">${list.length}試合</span></div>`;
-      list.forEach((m,i)=>{html+=matchRow(m); if(di===1&&i===0) html+=prCard();});
+      list.forEach((m,i)=>{html+=matchRow(m); if(di===1&&i===0) html+=prCard(0); if(di===2&&i===0) html+=prCard(1);});
       html+=`</div>`;
     });
     document.getElementById("upnext").innerHTML=html;

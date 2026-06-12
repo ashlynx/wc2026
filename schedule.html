@@ -69,7 +69,7 @@
     days.forEach((d,di)=>{
       const list=sel.filter(m=>m.d===d);
       html+=`<div class="daygroup"><div class="dayhead"><div class="daydate">${d}<small>${list[0].w}曜</small></div>${di===0?'<span class="nextflag">NEXT</span>':''}<span class="daycount">${list.length}試合</span></div>`;
-      list.forEach((m,i)=>{html+=matchRow(m); if(fTv==="すべて"&&fJp==="すべての試合"&&list.length>=4&&i===2) html+=prCard();});
+      list.forEach((m,i)=>{html+=matchRow(m); if(fTv==="すべて"&&fJp==="すべての試合"&&list.length>=4&&i===2) html+=prCard(di);});
       html+=`</div>`;
     });
 

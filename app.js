@@ -154,10 +154,13 @@ function teamSide(name, right){
   const f = flag(name);
   const img = f ? `<img src="${f}" alt="">` : `<span class="ph"></span>`;
   const jp = name==="日本" ? " jpn" : "";
-  return `<span class="side${right?' r':''}">${img}<span class="tn${jp}">${name}</span></span>`;
+  const rk = (typeof RANK!=="undefined" && RANK[name]) ? `<span class="rk">${RANK[name]}</span>` : "";
+  return `<span class="side${right?' r':''}">${img}<span class="tn${jp}">${name}</span>${rk}</span>`;
 }
 function matchRow(m){
-  const mid = m.s ? `<span class="m-score">${m.s[0]}<span class="ms-dash">-</span>${m.s[1]}</span>` : `<span class="vs">VS</span>`;
+  const mid = m.s
+    ? `<span class="m-score"><span class="ft">FT</span><span class="sc">${m.s[0]}<span class="ms-dash">-</span>${m.s[1]}</span></span>`
+    : `<span class="vs">VS</span>`;
   return `<a class="match${m.jp?' jp':''}" href="#">
     <div class="m-time"><b>${m.time}</b><span>${m.loc||'&nbsp;'}</span></div>
     <div class="m-teams">${teamSide(m.a)}${mid}${teamSide(m.b,true)}</div>
@@ -167,12 +170,18 @@ function matchRow(m){
     </div></a>`;
 }
 
-/* ===== PR枠（差し替え用。アフィリエイトリンクはここに） ===== */
-function prCard(){
+/* ===== PR枠（差し替え用。href="#" にアフィリエイトリンクを） ===== */
+const PR_VARIANTS = [
+  {h:"テレビでもスマホでも",d:"スマートTV・スマホ・PC・タブレット対応。自宅でも外出先でもW杯を。",c:"視聴方法を見る"},
+  {h:"全104試合をライブで",d:"好カードも番狂わせも、すべてリアルタイム。見逃し配信にも対応。",c:"今すぐ確認"},
+  {h:"日本代表をフルカバー",d:"グループステージから決勝まで、日本の全試合をチェック。",c:"プランを見る"}
+];
+function prCard(i){
+  const v = PR_VARIANTS[((i||0) % PR_VARIANTS.length + PR_VARIANTS.length) % PR_VARIANTS.length];
   return `<div class="pr">
     <span class="pr-tag">PR</span>
-    <div class="pr-body"><b>DAZN で全104試合をライブ配信</b><span>料金・キャンペーンは公式サイトでご確認ください。</span></div>
-    <a href="#" class="btn ghost">確認する</a></div>`;
+    <div class="pr-body"><b>${v.h}</b><span>${v.d}</span></div>
+    <a href="#" class="btn ghost">${v.c}</a></div>`;
 }
 
 /* ===== 放送ガイド4枚 ===== */
