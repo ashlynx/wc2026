@@ -341,10 +341,12 @@ function matchHero(m){
 
 function squadSection(name){
   const head=`<div class="sec-head"><span class="kicker">SQUAD</span><h2>${dispName(name)} 代表メンバー</h2><div class="line"></div></div>`;
-  if(name==="日本" && typeof SQUAD!=="undefined"){
+  const sq = (typeof SQUADS!=="undefined" && SQUADS[name]) ? SQUADS[name]
+           : (name==="日本" && typeof SQUAD!=="undefined") ? SQUAD : null;
+  if(sq){
     let s="";
     for(const pos of ["GK","DF","MF","FW"]){
-      const ps=(SQUAD[pos]||[]).map(p=>{
+      const ps=(sq[pos]||[]).map(p=>{
         const star=p[3]==="key"?'<span class="star">★</span>':'';
         return `<div class="player"><span class="no">${p[0]}</span><span class="pn">${p[1]}${star}</span><span class="club">${p[2]}</span></div>`;
       }).join("");

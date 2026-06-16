@@ -195,3 +195,27 @@ const SQUAD = {
 
 /* 次の日本戦キックオフ（JST） */
 const KICKOFF = "2026-06-15T05:00:00+09:00";
+
+/* ===== 代表メンバー（日本＋グループF相手3カ国／最終26名・WFA等を参照） =====
+   形式: ["背番号","表示名","所属クラブ"(,"key"=注目選手)]  ※背番号未確定は "-" */
+const SQUADS = {
+  "日本": (typeof SQUAD!=="undefined") ? SQUAD : null,
+  "オランダ": {
+    GK:[["1","フェルブルッヘン","Brighton"],["13","ローフス","Sunderland"],["23","フレッケン","Leverkusen"]],
+    DF:[["2","ヘールトライダ","Sunderland"],["4","ファン・ダイク","Liverpool","key"],["5","アケ","Man City"],["6","ファン・ヘッケ","Brighton"],["15","ファン・デ・フェン","Tottenham"],["22","ダンフリース","Inter"],["25","ハト","Chelsea"]],
+    MF:[["3","デ・ローン","Atalanta"],["7","クライファート","Bournemouth"],["8","フラーフェンベルフ","Liverpool"],["12","ウィーファー","Brighton"],["14","ラインデルス","Man City"],["16","ティル","PSV"],["20","コープマイネルス","Juventus"],["21","デ・ヨング","Barcelona","key"],["26","Q.ティンバー","Feyenoord"]],
+    FW:[["9","ベグホルスト","Ajax"],["10","デパイ","Corinthians"],["11","ガクポ","Liverpool","key"],["17","ラング","Napoli"],["18","マレン","Aston Villa"],["19","ブロビー","Sunderland"],["24","サマーヴィル","West Ham"]]
+  },
+  "スウェーデン": {
+    GK:[["1","ゼッターストローム","Derby County"],["12","V.ヨハンソン","Stoke City"],["23","ノルフェルト","AIK"]],
+    DF:[["2","ラガービエルケ","SC Braga"],["3","リンデロフ","Aston Villa"],["4","ヒエン","Atalanta"],["5","グドムンドソン","Leeds"],["6","H.ヨハンソン","FC Dallas"],["8","スヴェンソン","Dortmund"],["14","エクダル","Burnley"],["15","スタルフェルト","Celta"],["20","E.スミス","St. Pauli"]],
+    MF:[["7","ベリヴァル","Tottenham"],["16","カールストロム","Udinese"],["18","アヤリ","Brighton"],["19","スヴァンベリ","Wolfsburg"],["22","ゼネリ","Elfsborg"],["24","ストラウド","Mjällby"]],
+    FW:[["9","イサク","Liverpool","key"],["10","ニーグレン","Celtic"],["11","エランガ","Newcastle","key"],["13","セマ","Pafos"],["17","ギェケレシュ","Arsenal","key"],["21","ベルンハルドソン","Holstein Kiel"],["25","ニルソン","Club Brugge"],["26","アリ","Malmö FF"]]
+  },
+  "チュニジア": {
+    GK:[["16","ダーメン","CS Sfaxien"],["22","シャマフ","Club Africain"],["-","ベン・ヘッセン","Étoile du Sahel"]],
+    DF:[["2","アブディ","OGC Nice"],["3","ベン・ハミダ","Espérance"],["4","レキク","NK Maribor"],["5","アルース","Kasımpaşa"],["20","ヴァレリー","Sheffield Wed"],["21","ネファティ","IFK Norrköping"],["24","シハウィ","US Monastir"],["-","ブロン","Servette"],["-","タルビ","Lorient"]],
+    MF:[["6","ケディラ","Union Berlin","key"],["10","ハンニバル","Burnley","key"],["15","マフムード","Lugano"],["17","スキリ","Eintracht","key"],["25","スリマン","Norwich"]],
+    FW:[["7","K.アヤリ","PSG Espoirs"],["8","サアド","Augsburg"],["9","マストウリ","Dinamo Makhachkala"],["11","ガルビ","Augsburg"],["19","シワト","Club Africain"],["-","ビン・アナス","Kasımpaşa"],["26","トゥネクティ","Celtic"],["-","アシュリ","FC København"],["-","エルーミ","Vancouver"]]
+  }
+};
