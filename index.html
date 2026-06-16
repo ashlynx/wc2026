@@ -40,18 +40,8 @@
 
 <main class="wrap">
   <section class="hero">
-    <div class="eyebrow"><span class="tag">NEXT MATCH</span><span class="sub">グループF・第1戦 ／ 日本代表の初戦</span></div>
-    <div class="ticket">
-      <div class="ticket-grid">
-        <div class="team jp"><img class="flag" src="https://flagcdn.com/jp.svg" alt="日本"><div><div class="name">日本</div><div class="rank">FIFA 18位</div></div></div>
-        <div class="center"><div class="kick-date">6月15日(月)</div><div class="kick-time">05:00</div><div class="kick-jst">日本時間 (JST)</div><div class="kick-local">現地 6/14(日) 15:00</div></div>
-        <div class="team right"><img class="flag" src="https://flagcdn.com/nl.svg" alt="オランダ"><div><div class="name">オランダ</div><div class="rank">FIFA 7位</div></div></div>
-      </div>
-      <div class="ticket-foot">
-        <span class="where">📍 ダラス・AT&Tスタジアム</span>
-        <div class="chips"><span class="chip free">DAZN 無料</span><span class="chip">NHK BS</span><span class="chip">BSP4K</span><a href="japan.html" class="detail-link">詳細 →</a></div>
-      </div>
-    </div>
+    <div class="eyebrow"><span class="tag">NEXT MATCH</span><span class="sub" id="hero-sub"></span></div>
+    <div id="hero-ticket"></div>
     <div class="cd"><div class="unit"><b id="cd-d">--</b><span>DAYS</span></div><div class="unit"><b id="cd-h">--</b><span>HOURS</span></div><div class="unit"><b id="cd-m">--</b><span>MINUTES</span></div><div class="unit"><b id="cd-s">--</b><span>SECONDS</span></div></div>
   </section>
 
@@ -76,22 +66,28 @@
 <script src="app.js"></script>
 <script>
   buildChrome("top");
-  startCountdown(KICKOFF);
   document.getElementById("howto").innerHTML=howToWatch();
 
   function render(){
-    // 近日の試合: 先頭から3日分 + 途中にPR
-    const days=[...new Set(MATCHES.map(m=>m.d))].slice(0,3);
+    // NEXT MATCH ヒーロー = 次の日本戦（無ければ次の注目試合）
+    const nm = nextMatch(true) || nextMatch(false);
+    const subEl=document.getElementById("hero-sub");
+    if(subEl) subEl.textContent = nm ? (nm.jp?`グループ${nm.g}・日本代表 第${jpMatchNo(nm)}戦`:`グループ${nm.g}・次の注目試合`) : "グループステージ終了";
+    const tEl=document.getElementById("hero-ticket"); if(tEl) tEl.innerHTML=heroTicket(nm);
+    if(nm) startCountdown(matchDT(nm).toISOString());
+
+    // 近日の試合 = これから行われる試合を日付順に3日分
+    const now=Date.now();
+    const up=MATCHES.filter(m=>m.g && matchDT(m).getTime()>now).sort((a,b)=>matchDT(a)-matchDT(b));
+    const days=[...new Set(up.map(m=>m.d))].slice(0,3);
     let html="";
     days.forEach((d,di)=>{
-      const list=MATCHES.filter(m=>m.d===d);
-      const w=list[0].w;
-      html+=`<div class="daygroup"><div class="dayhead"><div class="daydate">${d}<small>${w}曜</small></div>${di===0?'<span class="nextflag">NEXT</span>':''}<span class="daycount">${list.length}試合</span></div>`;
-      list.forEach((m,i)=>{html+=matchRow(m); if(di===1&&i===0) html+=prCard(0); if(di===2&&i===0) html+=prCard(1);});
+      const list=up.filter(m=>m.d===d);
+      html+=`<div class="daygroup"><div class="dayhead"><div class="daydate">${d}<small>${list[0].w}曜</small></div>${di===0?'<span class="nextflag">NEXT</span>':''}<span class="daycount">${list.length}試合</span></div>`;
+      list.forEach((m,i)=>{html+=matchRow(m); if(di===0&&i===0) html+=prCard(0); if(di===1&&i===0) html+=prCard(1);});
       html+=`</div>`;
     });
-    document.getElementById("upnext").innerHTML=html;
-    // グループF 順位表（ライブ反映）
+    document.getElementById("upnext").innerHTML = html || '<p style="color:var(--muted);font-size:13px">表示できる予定試合がありません。</p>';
     document.getElementById("groupF").innerHTML=standingsTable("F");
   }
   bootstrap(render);

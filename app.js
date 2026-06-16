@@ -38,9 +38,10 @@ function buildChrome(active){
   document.getElementById("close-drawer").onclick = ()=>drawer.classList.remove("open");
   drawer.querySelectorAll("[data-close]").forEach(a=>a.onclick=()=>drawer.classList.remove("open"));
 
-  // header day counter
+  // header day counter（次の日本戦まで）
   const hd = document.getElementById("hdr-days");
-  const dleft = Math.max(0, Math.ceil((new Date(KICKOFF)-Date.now())/86400000));
+  const _nm = (typeof nextMatch==="function") ? nextMatch(true) : null;
+  const dleft = _nm ? Math.max(0, Math.ceil((matchDT(_nm)-Date.now())/86400000)) : 0;
   if(hd) hd.textContent = dleft;
 }
 
@@ -100,6 +101,41 @@ async function loadLive(){
 }
 // ライブ取得 → 描画。各ページは render 関数を渡す。
 function bootstrap(render){ loadLive().then(render).catch(render); }
+
+/* ===== 試合日時・次の試合・ヒーロー ===== */
+function matchDT(m){
+  const p=m.d.split("."), mo=p[0].padStart(2,"0"), da=p[1].padStart(2,"0");
+  return new Date(`2026-${mo}-${da}T${m.time}:00+09:00`);
+}
+function nextMatch(japanOnly){
+  const now=Date.now();
+  const pool=MATCHES.filter(m=>m.g && (!japanOnly||m.jp) && matchDT(m).getTime()>now);
+  pool.sort((a,b)=>matchDT(a)-matchDT(b));
+  return pool[0]||null;
+}
+function jpMatchNo(m){
+  const jps=MATCHES.filter(x=>x.jp).sort((a,b)=>matchDT(a)-matchDT(b));
+  const i=jps.indexOf(m); return i>=0?i+1:null;
+}
+function dateLabel(m){ const p=m.d.split("."); return `${parseInt(p[0],10)}月${parseInt(p[1],10)}日(${m.w})`; }
+function heroTicket(m){
+  if(!m) return `<div class="ticket"><div class="ticket-grid" style="grid-template-columns:1fr"><div class="center"><div class="kick-date">グループステージ全日程終了</div><div class="kick-jst">決勝トーナメントは順位表ページへ</div></div></div></div>`;
+  const left = m.b==="日本" ? m.b : m.a;     // 日本を左に
+  const right = left===m.a ? m.b : m.a;
+  const tb=(name,r)=>`<div class="team${name==="日本"?' jp':''}${r?' right':''}"><img class="flag" src="${flag(name)}" alt="${name}"><div><div class="name">${name}</div><div class="rank">FIFA ${RANK[name]||'-'}位</div></div></div>`;
+  const chips=(m.tv||[]).map(t=>`<span class="chip${t==="無料"?' free':''}">${t}</span>`).join("");
+  const local = m.loc?`<div class="kick-local">${m.loc}</div>`:'';
+  return `<div class="ticket">
+    <div class="ticket-grid">
+      ${tb(left,false)}
+      <div class="center"><div class="kick-date">${dateLabel(m)}</div><div class="kick-time">${m.time}</div><div class="kick-jst">日本時間 (JST)</div>${local}</div>
+      ${tb(right,true)}
+    </div>
+    <div class="ticket-foot">
+      <span class="where">📍 ${m.v}</span>
+      <div class="chips">${chips}<a href="japan.html" class="detail-link">詳細 →</a></div>
+    </div></div>`;
+}
 
 /* ===== 順位計算（試合結果 s:[a,b] から集計し並び替え） ===== */
 function computeStandings(g){

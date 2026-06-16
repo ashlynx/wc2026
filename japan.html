@@ -88,9 +88,9 @@
   <p style="font-size:11.5px;color:var(--faint);margin-top:12px">★ … 各国の中心となるキーマン</p>
 
   <div class="cd-band">
-    <div class="lab">日本代表 第1戦 まで</div>
+    <div class="lab" id="cd-lab">日本代表 次戦まで</div>
     <div class="cd"><div class="unit"><b id="cd-d">--</b><span>DAYS</span></div><div class="unit"><b id="cd-h">--</b><span>HRS</span></div><div class="unit"><b id="cd-m">--</b><span>MIN</span></div><div class="unit"><b id="cd-s">--</b><span>SEC</span></div></div>
-    <div class="ko">6/15(月) 05:00 日本時間 キックオフ</div>
+    <div class="ko" id="cd-ko"></div>
   </div>
 </main>
 
@@ -100,7 +100,17 @@
 <script src="app.js"></script>
 <script>
   buildChrome("japan");
-  startCountdown(KICKOFF);
+  (function(){
+    const jn=nextMatch(true);
+    if(jn){
+      startCountdown(matchDT(jn).toISOString());
+      const lab=document.getElementById("cd-lab"); if(lab) lab.textContent=`日本代表 第${jpMatchNo(jn)}戦 まで`;
+      const opp=jn.a==="日本"?jn.b:jn.a;
+      const ko=document.getElementById("cd-ko"); if(ko) ko.textContent=`${dateLabel(jn)} ${jn.time} 日本時間 キックオフ ・ vs ${opp}`;
+    } else {
+      const lab=document.getElementById("cd-lab"); if(lab) lab.textContent="グループステージ全日程終了";
+    }
+  })();
 
   function render(){
     // グループF（ライブ反映）
