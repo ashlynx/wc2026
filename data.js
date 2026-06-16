@@ -316,7 +316,7 @@ const SQUADS = {
   },
   "イングランド": {
     GK:[["1","ピックフォード","Everton"],["13","D.ヘンダーソン","Crystal Palace"],["23","トラッフォード","Man City"]],
-    DF:[["2","コンサ","Aston Villa"],["3","オライリー","Man City"],["5","ストーンズ","Man City"],["6","グエイ","Man City","key"],["12","リヴラメント","Newcastle"],["15","ダン・バーン","Newcastle"],["24","リース・ジェームズ","Chelsea"],["25","スペンス","Tottenham"],["26","クアンサー","Leverkusen"]],
+    DF:[["2","コンサ","Aston Villa"],["3","オライリー","Man City"],["5","ストーンズ","Man City"],["6","グエイ","Crystal Palace","key"],["12","リヴラメント","Newcastle"],["15","ダン・バーン","Newcastle"],["24","リース・ジェームズ","Chelsea"],["25","スペンス","Tottenham"],["26","クアンサー","Leverkusen"]],
     MF:[["4","ライス","Arsenal","key"],["8","E.アンダーソン","Nottm Forest"],["10","ベリンガム","Real Madrid"],["14","J.ヘンダーソン","Brentford"],["16","メイヌー","Man Utd"],["17","ロジャーズ","Aston Villa"],["21","エゼ","Arsenal"]],
     FW:[["7","サカ","Arsenal"],["9","ケイン","Bayern","key"],["11","ラッシュフォード","Barcelona"],["18","ゴードン","Newcastle"],["19","ワトキンス","Aston Villa"],["20","マドゥエケ","Arsenal"],["22","トニー","Al-Ahli"]]
   },
@@ -330,7 +330,7 @@ const SQUADS = {
     GK:[["1","アティ＝ジギ","St. Gallen"],["12","アナング","St Patrick's"],["16","アサレ","Hearts of Oak"]],
     DF:[["2","セイドゥ","Rennes"],["4","アヅェテイ","Basel"],["6","ムミン","Rayo"],["14","ギデオン・メンサー","Auxerre"],["17","ババ","PAOK"],["18","オポク","Başakşehir"],["21","オポン","Nice"],["23","ルカセン","Pafos"],["26","セナヤ","Auxerre"]],
     MF:[["3","イレンキ","Nordsjælland"],["5","パルティ","Villarreal","key"],["8","シボ","Real Oviedo"],["15","オウス","Auxerre"],["20","ボアキエ","Saint-Étienne"]],
-    FW:[["7","ファタウ","Leicester"],["9","ジョルダン・アイェウ","Leicester"],["10","トーマス・アサンテ","Coventry"],["11","セメニョ","Man City","key"],["13","ボンス・バー","Al-Qadsiah"],["19","イニャキ・ウィリアムズ","Athletic Bilbao"],["22","カマルディーン","Atalanta"],["24","ヌアマ","Lyon"],["25","プリンス・アドゥ","Viktoria Plzeň"]]
+    FW:[["7","ファタウ","Leicester"],["9","ジョルダン・アイェウ","Leicester"],["10","トーマス・アサンテ","Coventry"],["11","セメニョ","Bournemouth","key"],["13","ボンス・バー","Al-Qadsiah"],["19","イニャキ・ウィリアムズ","Athletic Bilbao"],["22","カマルディーン","Atalanta"],["24","ヌアマ","Lyon"],["25","プリンス・アドゥ","Viktoria Plzeň"]]
   },
   "パナマ": {
     GK:[["1","メヒア","Nacional"],["12","サムディオ","Marathón"],["22","モスケラ","Al-Feiha"]],
