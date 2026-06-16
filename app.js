@@ -7,7 +7,9 @@ const LINKS = {
   nhk:      "https://www.nhk.jp/g/fifaworldcup/",  // NHK公式 W杯ページ
   bs4k:     "https://www.nhk.jp/p/bs4k/",          // BS4K案内
   schedule: "schedule.html",
-  japan:    "japan.html"
+  japan:    "japan.html",
+  guideDazn:"guide-dazn.html",                     // 記事: DAZNで見る方法
+  guideBs4k:"guide-bs4k.html"                      // 記事: BS4Kで見る方法
 };
 // data-aff属性を持つ静的リンクにURLを流し込む
 function applyLinks(){
@@ -22,9 +24,9 @@ function dispName(n){ return (typeof FULLNAME!=="undefined" && FULLNAME[n]) || n
 // NHK風の導線ブロック（配信・速報・BS4K・日程）
 function watchLinks(){
   const items=[
-    {t:"見逃し配信で見る",d:"終わった試合もあとから。ハイライトもフルマッチも。",c:"配信を見る",h:LINKS.dazn,pr:true,ext:false},
+    {t:"DAZNで2026 W杯を見る方法",d:"全104試合ライブ＋日本戦は無料。料金プランと申し込み手順を解説。",c:"記事を読む",h:LINKS.guideDazn,pr:true,ext:false},
+    {t:"NHK BS4Kで全試合を観る",d:"受信契約があれば追加料金なし。視聴方法をいちから解説。",c:"記事を読む",h:LINKS.guideBs4k,pr:false,ext:false},
     {t:"日本代表 速報・最新情報",d:"結果・メンバー・コメントを随時更新でチェック。",c:"速報を見る",h:LINKS.nhk,pr:false,ext:true},
-    {t:"BS4Kで全試合を観る",d:"高画質で全104試合。視聴方法をいちから解説。",c:"見る方法",h:LINKS.bs4k,pr:false,ext:true},
     {t:"全試合スケジュール",d:"日本時間で全104試合の日程・放送を一覧。",c:"日程を見る",h:LINKS.schedule,pr:false,ext:false}
   ];
   return `<div class="sec-head"><span class="kicker">MORE</span><h2>もっと楽しむ・配信で見る</h2><div class="line"></div></div>
@@ -62,8 +64,8 @@ function buildChrome(active){
   if(foot) foot.innerHTML = `
     <footer><div class="wrap">
       <div class="foot-links">
-        <a href="#">プライバシーポリシー</a><a href="#">運営者情報</a>
-        <a href="#">免責事項</a><a href="#">お問い合わせ</a>
+        <a href="privacy.html">プライバシーポリシー</a><a href="about.html">運営者情報</a>
+        <a href="disclaimer.html">免責事項</a><a href="contact.html">お問い合わせ</a>
       </div>
       <p class="foot-note">© 2026 PITCH26｜2026 W杯 視聴ガイド ・本サイトは非公式ガイドです。日程・放送内容は変更される場合があります。最新情報は各公式サイトをご確認ください。</p>
     </div></footer>`;
@@ -171,7 +173,7 @@ function heroTicket(m){
     </div>
     <div class="ticket-foot">
       <span class="where">📍 ${m.v}</span>
-      <div class="chips">${chips}<a href="japan.html" class="detail-link">詳細 →</a></div>
+      <div class="chips">${chips}<a href="match.html?m=${encodeURIComponent(matchId(m))}" class="detail-link">詳細 →</a></div>
     </div></div>`;
 }
 
@@ -235,7 +237,7 @@ function matchRow(m){
   const mid = m.s
     ? `<span class="m-score"><span class="ft">FT</span><span class="sc">${m.s[0]}<span class="ms-dash">-</span>${m.s[1]}</span></span>`
     : `<span class="vs">VS</span>`;
-  return `<a class="match${m.jp?' jp':''}" href="#">
+  return `<a class="match${m.jp?' jp':''}" href="match.html?m=${encodeURIComponent(matchId(m))}">
     <div class="m-time"><b>${m.time}</b><span>${m.loc||'&nbsp;'}</span></div>
     <div class="m-teams">${teamSide(m.a)}${mid}${teamSide(m.b,true)}</div>
     <div class="m-meta">
@@ -283,4 +285,113 @@ function startCountdown(target){
     set("cd-s",String(Math.floor(diff%60000/1000)).padStart(2,"0"));
   }
   tick(); setInterval(tick,1000);
+}
+
+/* =======================================================================
+   試合詳細ページ / 国（代表）ページ 用の共通ヘルパー & レンダラ
+   ======================================================================= */
+function qparam(k){ return new URLSearchParams(location.search).get(k); }
+function matchId(m){ return `${m.a}__${m.b}__${m.d}__${m.time}`; }
+function findMatch(id){ return MATCHES.find(m=>matchId(m)===id) || null; }
+function teamGroup(name){ return Object.keys(GROUPS).find(G=>GROUPS[G].includes(name)) || null; }
+
+function groupMatchNo(m){
+  const gm=MATCHES.filter(x=>x.g===m.g).sort((a,b)=>matchDT(a)-matchDT(b));
+  const i=gm.indexOf(m); return i>=0?i+1:null;
+}
+function roundLabel(m){
+  if(m.r) return m.r;
+  const n=groupMatchNo(m);
+  return n?`グループステージ・第${n}戦`:'グループステージ';
+}
+
+function dayGrouped(list){
+  if(!list.length) return '<p class="muted" style="padding:8px 2px">該当する試合はありません。</p>';
+  const days=[...new Set(list.map(m=>m.d))];
+  let html="";
+  days.forEach(d=>{
+    const ms=list.filter(m=>m.d===d);
+    html+=`<div class="daygroup"><div class="dayhead"><div class="daydate">${d}<small>${ms[0].w}曜</small></div><span class="daycount">${ms.length}試合</span></div>`;
+    ms.forEach(m=>{ html+=matchRow(m); });
+    html+=`</div>`;
+  });
+  return html;
+}
+
+function teamLinkCard(name){
+  return `<a class="team-link" href="team.html?t=${encodeURIComponent(name)}">
+    <img src="${flag(name)}" alt=""><span><b>${dispName(name)}</b>のすべての試合を見る</span><i>→</i></a>`;
+}
+
+function matchHero(m){
+  const fin = !!m.s;
+  const side=(n,r)=>`<div class="mh-team${n==="日本"?' jp':''}${r?' r':''}">
+      <img src="${flag(n)}" alt=""><div class="mh-name">${dispName(n)}</div><div class="mh-rk">FIFA ${RANK[n]||'-'}位</div></div>`;
+  const center = fin
+    ? `<div class="mh-center"><div class="mh-date">${dateLabel(m)} ・ FT</div><div class="mh-score">${m.s[0]}<span>-</span>${m.s[1]}</div></div>`
+    : `<div class="mh-center"><div class="mh-date">${dateLabel(m)}</div><div class="mh-jst">日本時間</div><div class="mh-time">${m.time}</div><div class="mh-vs">VS</div>${m.loc?`<div class="mh-local">${m.loc}</div>`:''}</div>`;
+  const chips=(m.tv||[]).map(t=>`<span class="chip${t==='無料'?' free':t==='DAZN'?' dazn':''}">${t}</span>`).join("");
+  const status = fin?'<span class="mh-status">試合終了</span>':'';
+  return `<div class="mhero">
+    <div class="mh-top"><span class="mh-g">GROUP ${m.g}</span><span class="mh-round">${roundLabel(m)}</span>${status}</div>
+    <div class="mh-grid">${side(m.a,false)}${center}${side(m.b,true)}</div>
+    <div class="mh-foot"><span class="mh-where">📍 ${m.v}</span><div class="mh-chips"><span class="mh-lab">${fin?'放送局':'ここで見られる'}</span>${chips}</div></div>
+  </div>`;
+}
+
+function squadSection(name){
+  const head=`<div class="sec-head"><span class="kicker">SQUAD</span><h2>${dispName(name)} 代表メンバー</h2><div class="line"></div></div>`;
+  if(name==="日本" && typeof SQUAD!=="undefined"){
+    let s="";
+    for(const pos of ["GK","DF","MF","FW"]){
+      const ps=(SQUAD[pos]||[]).map(p=>{
+        const star=p[3]==="key"?'<span class="star">★</span>':'';
+        return `<div class="player"><span class="no">${p[0]}</span><span class="pn">${p[1]}${star}</span><span class="club">${p[2]}</span></div>`;
+      }).join("");
+      s+=`<div class="pos-block"><h4>${pos}</h4>${ps}</div>`;
+    }
+    return head+`<div class="squad">${s}</div><p style="font-size:11.5px;color:var(--faint);margin-top:12px">★ … 各国の中心となるキーマン</p>`;
+  }
+  return head+`<div class="squad-tba">代表メンバーは発表・確定が進み次第、順次追加します。</div>`;
+}
+
+function renderMatchPage(){
+  const root=document.getElementById("match-root"); if(!root) return;
+  const id=qparam("m"); const m=id?findMatch(id):null;
+  if(!m){ root.innerHTML=`<a class="back" href="schedule.html">‹ 戻る</a><div class="empty">試合が見つかりませんでした。<br><a href="schedule.html">全試合日程へ →</a></div>`; return; }
+  document.title=`${dispName(m.a)} vs ${dispName(m.b)}（${m.d} ${m.w} ${m.time}）｜2026W杯 PITCH26`;
+  const others=MATCHES.filter(x=>x.g===m.g && matchId(x)!==id).sort((a,b)=>matchDT(a)-matchDT(b));
+  root.innerHTML=`
+    <a class="back" href="schedule.html">‹ 戻る</a>
+    ${matchHero(m)}
+    <div class="tl-cards">${teamLinkCard(m.a)}${teamLinkCard(m.b)}</div>
+    <div class="sec-head"><span class="kicker">GROUP ${m.g}</span><h2>グループ${m.g} 順位表</h2><div class="line"></div></div>
+    ${standingsTable(m.g)}
+    ${prCard(groupMatchNo(m)||0)}
+    <div class="sec-head"><span class="kicker">GROUP ${m.g}</span><h2>グループ${m.g} その他の試合</h2><div class="line"></div></div>
+    <div class="day-list">${dayGrouped(others)}</div>`;
+  applyLinks();
+}
+
+function renderTeamPage(){
+  const root=document.getElementById("team-root"); if(!root) return;
+  const name=qparam("t"); const g=name?teamGroup(name):null;
+  if(!name||!g){ root.innerHTML=`<a class="back" href="schedule.html">‹ 戻る</a><div class="empty">チームが見つかりませんでした。<br><a href="schedule.html">全試合日程へ →</a></div>`; return; }
+  document.title=`${dispName(name)}｜日程・順位・メンバー｜2026W杯 PITCH26`;
+  const ms=MATCHES.filter(x=>x.a===name||x.b===name).sort((a,b)=>matchDT(a)-matchDT(b));
+  const head=`<div class="thero">
+    <div class="th-main"><img class="th-flag" src="${flag(name)}" alt="">
+      <div><div class="th-kick">グループ${g}</div><h1 class="th-name${name==="日本"?' jp':''}">${dispName(name)}</h1></div></div>
+    <div class="th-rank"><span>FIFA RANK</span><b>${RANK[name]||'-'}</b></div></div>`;
+  root.innerHTML=`
+    <a class="back" href="schedule.html">‹ 戻る</a>
+    ${head}
+    <div class="sec-head"><span class="kicker">GROUP STAGE</span><h2>${dispName(name)} の試合日程</h2><div class="line"></div></div>
+    <div class="day-list">${dayGrouped(ms)}</div>
+    ${prCard(0)}
+    <div class="sec-head"><span class="kicker">GROUP ${g}</span><h2>グループ${g} 順位表</h2><div class="line"></div></div>
+    ${standingsTable(g)}
+    ${howToWatch()}
+    ${squadSection(name)}`;
+  applyLinks();
 }

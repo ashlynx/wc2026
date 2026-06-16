@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>代表チーム｜2026W杯 視聴ガイド｜PITCH26</title>
+<meta name="description" content="2026 FIFAワールドカップ 出場国の試合日程と結果、所属グループの順位表、代表メンバーをまとめて確認できます。">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=7">
+</head>
+<body>
+<div id="chrome-header"></div>
+<main class="wrap">
+  <div id="team-root"></div>
+</main>
+<div id="chrome-footer"></div>
+<script src="data.js?v=7"></script>
+<script src="app.js?v=7"></script>
+<script>
+  buildChrome("");
+  bootstrap(renderTeamPage);
+</script>
+</body>
+</html>
