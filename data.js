@@ -433,5 +433,53 @@ const SQUADS = {
     DF:[["2","ジマ","Slavia Prague"],["3","ホレシュ","Slavia Prague"],["4","フラナーチ","Hoffenheim"],["5","クファル","Hoffenheim"],["6","チャロウペク","Slavia Prague"],["7","クレイチー","Wolves"],["14","ユラーセク","Beşiktaş"],["20","ゼレニー","Sparta Prague"],["21","ドゥデラ","Slavia Prague"]],
     MF:[["2","ソイカ","Viktoria Plzeň"],["8","ダリダ","Aris"],["12","チェルフ","Viktoria Plzeň"],["14","プロヴォド","Slavia Prague"],["15","シュルツ","Lyon"],["18","サジレク","Slavia Prague"],["22","ソウチェク","West Ham","key"],["25","ソフレク","Sparta Prague"],["26","ヴィシンスキー","Viktoria Plzeň"]],
     FW:[["9","フロジェク","Hoffenheim"],["10","シック","Leverkusen","key"],["11","クフタ","Sparta Prague"],["13","ヒティル","Slavia Prague"],["19","ホリー","Slavia Prague"]]
+  },
+  "カナダ": {
+    GK:[["1","セント・クレア","Inter Miami"],["16","クレポー","Orlando City"],["18","グッドマン","Huddersfield"]],
+    DF:[["2","アリスター・ジョンストン","Celtic"],["3","アルフィー・ジョーンズ","Middlesbrough"],["4","デ・フーゲロールズ","Dender"],["5","ウォーターマン","Chicago Fire"],["13","コーネリアス","Rangers"],["15","ボンビト","Nice"],["19","アルフォンソ・デイヴィス","Bayern","key"],["22","ラリア","Toronto FC"]],
+    MF:[["6","シュワニエール","Grasshopper"],["7","エウスタキオ","FC Porto"],["8","イスマエル・コネ","Sassuolo"],["20","アリ・アーメド","Norwich"],["21","オソリオ","Toronto FC"],["23","シグル","Hajduk Split"],["25","サリバ","Anderlecht"]],
+    FW:[["9","ラリン","Feyenoord"],["10","ジョナサン・デイヴィッド","Juventus","key"],["11","リアム・ミラー","Hull City"],["12","オルワセイ","Villarreal"],["14","シャッフェルブルグ","LAFC"],["17","ブキャナン","Villarreal"],["24","アキンペル","Union SG"]]
+  },
+  "ボスニア": {
+    GK:[["1","ヴァシリ","St. Pauli"],["12","ユルカス","Borac Banja Luka"],["22","ズロミスリッチ","Rijeka"]],
+    DF:[["2","ムヤキッチ","Eyüpspor"],["3","ハジカドゥニッチ","Sampdoria"],["4","ムハレモビッチ","Sassuolo"],["5","コラシナツ","Atalanta","key"],["7","デディッチ","Benfica"],["18","カティッチ","Schalke"],["21","ラデリッチ","Rijeka"],["24","チェリク","RC Lens"],["-","マリッチ","Sturm Graz"]],
+    MF:[["6","タヒロヴィッチ","Brøndby"],["8","ギゴヴィッチ","Young Boys"],["13","イヴァン・バシッチ","Astana"],["14","シュニッチ","Pafos"],["15","メミッチ","Viktoria Plzeň"],["16","ハジアメトヴィッチ","Hull City"],["17","ブルニッチ","Karlsruhe"],["26","マフミッチ","Slovan Liberec"]],
+    FW:[["9","バジュダル","Real Zaragoza"],["10","デミロヴィッチ","Stuttgart"],["11","ジェコ","Fiorentina","key"],["19","アライベゴヴィチ","RB Salzburg"],["20","バイラクタレヴィチ","PSV","key"],["25","ルキッチ","Universitatea Cluj"]]
+  },
+  "スイス": {
+    GK:[["1","コベル","Dortmund"],["12","ムボゴ","Lorient"],["21","ケラー","Young Boys"]],
+    DF:[["2","ムハイム","Hamburger SV"],["3","ヴィドマー","Mainz"],["4","エルヴェディ","Gladbach"],["5","アカンジ","Inter","key"],["13","リカルド・ロドリゲス","Real Betis"],["18","キュマルト","Valencia"],["24","アメンダ","Eintracht"],["25","ジャケ","Stuttgart"]],
+    MF:[["6","ザカリア","Monaco","key"],["8","フロイラー","Bologna"],["9","マンザンビ","Freiburg"],["10","ジャカ","Sunderland","key"],["14","ヤシャリ","AC Milan"],["15","ソウ","Sevilla"],["16","ファスナハト","Young Boys"],["20","アエビシェール","Pisa"],["22","リーダー","Augsburg"]],
+    FW:[["7","エンボロ","Rennes"],["11","ンドイ","Nottm Forest"],["17","ルベン・バルガス","Sevilla"],["19","オカフォー","Leeds"],["23","アムドゥニ","Burnley"],["26","イッテン","Fortuna Düsseldorf"]]
+  },
+  "カタール": {
+    GK:[["1","アブーナダ","Al-Rayyan"],["21","ザカリア","Al-Duhail"],["22","バルシャム","Al-Sadd"]],
+    DF:[["2","ロー＝ロー","Al-Sadd"],["3","ルーカス・メンデス","Al-Wakrah"],["4","イサ・ライ","Al-Arabi"],["13","アル・ウイ","Al-Gharafa"],["14","ホーマン","Al-Duhail"],["16","フーヒー","Al-Sadd"],["18","アル＝ブラケ","Al-Duhail"],["25","アルハシュミ","Al-Arabi"]],
+    MF:[["5","ガベル","Al-Rayyan"],["6","ハーティム","Al-Rayyan"],["10","アル＝ハイドゥース","Al-Sadd"],["12","ブディアフ","Al-Duhail"],["17","アル・マナイ","Al-Shamal"],["20","ファティー","Al-Arabi"],["23","マディボ","Al-Wakrah"]],
+    FW:[["7","アラーッディーン","Al-Rayyan"],["8","エジミウソン","Al-Duhail"],["9","ムンタリ","Al-Gharafa"],["11","アフィーフ","Al-Sadd","key"],["15","アブドゥリサグ","Al-Wakrah"],["17","アル・ガネヒ","Al-Gharafa"],["19","アルモエズ・アリ","Al-Duhail"],["24","ジャムシード","Al-Duhail"]]
+  },
+  "アメリカ": {
+    GK:[["1","ターナー","New England"],["24","フリーズ","NYCFC"],["25","ブレイディ","Chicago Fire"]],
+    DF:[["2","デスト","PSV"],["3","リチャーズ","Crystal Palace","key"],["5","アントニー・ロビンソン","Fulham"],["6","トラスティー","Celtic"],["12","マイルズ・ロビンソン","Cincinnati"],["13","リーム","Charlotte"],["16","アレックス・フリーマン","Orlando City"],["22","マッケンジー","Toulouse"],["23","スカリー","Gladbach"]],
+    MF:[["4","タイラー・アダムス","Bournemouth"],["7","レイナ","Gladbach"],["8","マッケニー","Juventus"],["11","アーロンソン","Leeds","key"],["14","バーホルター","Vancouver"],["15","ロルダン","Seattle"],["17","ティルマン","Leverkusen"],["26","センデハス","Club América"]],
+    FW:[["9","ペピ","PSV"],["10","プルシック","AC Milan","key"],["18","アークステン","Columbus"],["19","ハジ・ライト","Coventry"],["20","バログン","Monaco"],["21","ティモシー・ウェア","Marseille"]]
+  },
+  "パラグアイ": {
+    GK:[["1","ロベルト・フェルナンデス","Cerro Porteño"],["12","ギル","San Lorenzo"],["22","オルベイラ","Olimpia"]],
+    DF:[["2","ベラスケス","Cerro Porteño"],["3","アルデレーテ","Sunderland"],["4","フアン・ホセ・カセレス","Dinamo Moscow"],["5","バルブエナ","Grêmio"],["6","フニオール・アロンソ","Atlético Mineiro"],["13","カナーレ","Lanús"],["15","グスタボ・ゴメス","Palmeiras"],["26","マイダナ","Talleres"]],
+    MF:[["8","ディエゴ・ゴメス","Brighton","key"],["11","マウリシオ","Palmeiras"],["14","キューバス","Vancouver"],["16","ボバディージャ","São Paulo"],["17","カクー","Al Ain"],["19","エンシソ","Strasbourg","key"],["20","オヘダ","Orlando City"],["23","ガラルサ","River Plate"]],
+    FW:[["7","ラモン・ソーサ","Palmeiras"],["9","サナブリア","Cremonese"],["10","アルミロン","Atlanta United","key"],["18","アルセ","Independiente Rivadavia"],["21","アバロス","Independiente"],["24","カバジェロ","Portsmouth"],["25","ピッタ","Bragantino"]]
+  },
+  "オーストラリア": {
+    GK:[["1","ライアン","Levante","key"],["12","イッツォ","Randers"],["18","ビーチ","Melbourne City"]],
+    DF:[["2","デゲネク","TSC"],["3","チルカーティ","Parma"],["4","イタリアーノ","Grazer AK"],["5","ボス","Feyenoord","key"],["6","ゲリア","Albirex Niigata"],["16","ベヒッチ","Melbourne City"],["19","サウター","Leicester","key"],["21","バージェス","Swansea"],["25","ヘリントン","Colorado"]],
+    MF:[["8","メトカーフ","St. Pauli"],["10","フルスティッチ","Heracles"],["13","オニール","NYCFC"],["14","デブリン","Hearts"],["15","トレウィン","Melbourne City"],["22","アーバイン","St. Pauli"],["24","オコン＝エングストラー","Sydney FC"]],
+    FW:[["7","レッキー","Melbourne City"],["9","モハメド・トゥーレ","Randers"],["11","メイビル","Castellón"],["17","イランクンダ","Watford"],["20","ヴォルパート","Sassuolo"],["23","ベルピレイ","Melbourne Victory"],["26","イェンギ","Aberdeen"]]
+  },
+  "トルコ": {
+    GK:[["1","ギュノク","Fenerbahçe"],["12","バユンドゥル","Man Utd"],["23","チャクル","Galatasaray"]],
+    DF:[["2","ゼキ・チェリク","Roma"],["3","デミラル","Al-Ahli"],["4","ソユンク","Fenerbahçe"],["13","エルマリ","Galatasaray"],["14","バルダクチ","Galatasaray"],["15","カバク","Hoffenheim"],["18","ミュルドゥル","Fenerbahçe"],["20","カドゥオール","Brighton"],["25","アカイディン","Rizespor"]],
+    MF:[["5","サリフ・エズジャン","Dortmund"],["6","コクチュ","Beşiktaş"],["8","アルダ・ギュレル","Real Madrid","key"],["10","チャルハノール","Inter","key"],["16","ユクセク","Fenerbahçe"],["22","アイハン","Galatasaray"],["26","ジャン・ウズン","Eintracht"]],
+    FW:[["7","アクトゥルコール","Fenerbahçe"],["9","デニス・ギュル","FC Porto"],["11","ケナン・ユルディズ","Juventus","key"],["17","カフヴェジ","Kasımpaşa"],["19","ユヌス・アクギュン","Galatasaray"],["21","バルシュ・アルペル・ユルマズ","Galatasaray"],["24","オグズ・アイディン","Fenerbahçe"]]
   }
 };
