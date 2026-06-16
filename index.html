@@ -53,6 +53,8 @@
 
   <section id="howto"></section>
 
+  <section id="watchlinks"></section>
+
   <section>
     <div class="sec-head"><span class="kicker">GROUP F</span><h2>日本のグループ</h2><div class="line"></div></div>
     <div id="groupF"></div>
@@ -67,6 +69,7 @@
 <script>
   buildChrome("top");
   document.getElementById("howto").innerHTML=howToWatch();
+  document.getElementById("watchlinks").innerHTML=watchLinks();
 
   function render(){
     // NEXT MATCH ヒーロー = 次の日本戦（無ければ次の注目試合）

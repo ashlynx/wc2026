@@ -1,3 +1,39 @@
+/* =======================================================================
+   外部リンク設定 — ここのURLを書き換えるだけでサイト全体に反映されます
+   （PR/アフィリエイト枠は data-aff="dazn" と prCardが参照します）
+   ======================================================================= */
+const LINKS = {
+  dazn:     "#",                                   // ← DAZN等アフィリエイトURLをここに
+  nhk:      "https://www.nhk.jp/g/fifaworldcup/",  // NHK公式 W杯ページ
+  bs4k:     "https://www.nhk.jp/p/bs4k/",          // BS4K案内
+  schedule: "schedule.html",
+  japan:    "japan.html"
+};
+// data-aff属性を持つ静的リンクにURLを流し込む
+function applyLinks(){
+  document.querySelectorAll("[data-aff]").forEach(a=>{
+    const k=a.getAttribute("data-aff"); if(LINKS[k]) a.href=LINKS[k];
+  });
+}
+// 正式名称（試合行・ヒーローでの表示用。内部キーは短縮名のまま）
+const FULLNAME = { "ボスニア":"ボスニア・ヘルツェゴビナ" };
+function dispName(n){ return (typeof FULLNAME!=="undefined" && FULLNAME[n]) || n; }
+
+// NHK風の導線ブロック（配信・速報・BS4K・日程）
+function watchLinks(){
+  const items=[
+    {t:"見逃し配信で見る",d:"終わった試合もあとから。ハイライトもフルマッチも。",c:"配信を見る",h:LINKS.dazn,pr:true,ext:false},
+    {t:"日本代表 速報・最新情報",d:"結果・メンバー・コメントを随時更新でチェック。",c:"速報を見る",h:LINKS.nhk,pr:false,ext:true},
+    {t:"BS4Kで全試合を観る",d:"高画質で全104試合。視聴方法をいちから解説。",c:"見る方法",h:LINKS.bs4k,pr:false,ext:true},
+    {t:"全試合スケジュール",d:"日本時間で全104試合の日程・放送を一覧。",c:"日程を見る",h:LINKS.schedule,pr:false,ext:false}
+  ];
+  return `<div class="sec-head"><span class="kicker">MORE</span><h2>もっと楽しむ・配信で見る</h2><div class="line"></div></div>
+  <div class="link-grid">`+items.map(x=>`<a class="lcard" href="${x.h}"${x.ext?' target="_blank" rel="noopener"':''}>
+      ${x.pr?'<span class="lc-tag">PR</span>':''}
+      <div class="lc-body"><b>${x.t}</b><span>${x.d}</span></div>
+      <span class="lc-cta">${x.c} →</span></a>`).join("")+`</div>`;
+}
+
 /* ===== ヘッダー & フッター（全ページ共通で注入） ===== */
 function buildChrome(active){
   const nav = [
@@ -43,6 +79,8 @@ function buildChrome(active){
   const _nm = (typeof nextMatch==="function") ? nextMatch(true) : null;
   const dleft = _nm ? Math.max(0, Math.ceil((matchDT(_nm)-Date.now())/86400000)) : 0;
   if(hd) hd.textContent = dleft;
+
+  applyLinks();
 }
 
 /* ===== ライブデータ（wc2026-live.json）取り込み ===== */
@@ -122,7 +160,7 @@ function heroTicket(m){
   if(!m) return `<div class="ticket"><div class="ticket-grid" style="grid-template-columns:1fr"><div class="center"><div class="kick-date">グループステージ全日程終了</div><div class="kick-jst">決勝トーナメントは順位表ページへ</div></div></div></div>`;
   const left = m.b==="日本" ? m.b : m.a;     // 日本を左に
   const right = left===m.a ? m.b : m.a;
-  const tb=(name,r)=>`<div class="team${name==="日本"?' jp':''}${r?' right':''}"><img class="flag" src="${flag(name)}" alt="${name}"><div><div class="name">${name}</div><div class="rank">FIFA ${RANK[name]||'-'}位</div></div></div>`;
+  const tb=(name,r)=>`<div class="team${name==="日本"?' jp':''}${r?' right':''}"><img class="flag" src="${flag(name)}" alt="${name}"><div><div class="name">${dispName(name)}</div><div class="rank">FIFA ${RANK[name]||'-'}位</div></div></div>`;
   const chips=(m.tv||[]).map(t=>`<span class="chip${t==="無料"?' free':''}">${t}</span>`).join("");
   const local = m.loc?`<div class="kick-local">${m.loc}</div>`:'';
   return `<div class="ticket">
@@ -191,7 +229,7 @@ function teamSide(name, right){
   const img = f ? `<img src="${f}" alt="">` : `<span class="ph"></span>`;
   const jp = name==="日本" ? " jpn" : "";
   const rk = (typeof RANK!=="undefined" && RANK[name]) ? `<span class="rk">${RANK[name]}</span>` : "";
-  return `<span class="side${right?' r':''}">${img}<span class="tn${jp}">${name}</span>${rk}</span>`;
+  return `<span class="side${right?' r':''}">${img}<span class="tn${jp}">${dispName(name)}</span>${rk}</span>`;
 }
 function matchRow(m){
   const mid = m.s
@@ -217,7 +255,7 @@ function prCard(i){
   return `<div class="pr">
     <span class="pr-tag">PR</span>
     <div class="pr-body"><b>${v.h}</b><span>${v.d}</span></div>
-    <a href="#" class="btn ghost">${v.c}</a></div>`;
+    <a href="${LINKS.dazn}" class="btn ghost"${LINKS.dazn.startsWith('http')?' target="_blank" rel="noopener"':''}>${v.c}</a></div>`;
 }
 
 /* ===== 放送ガイド4枚 ===== */
