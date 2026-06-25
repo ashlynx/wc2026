@@ -199,6 +199,28 @@ function computeStandings(g){
 }
 function gdFmt(n){return n>0?("+"+n):(""+n);}
 
+/* ===== 決勝T: スロット解決（順位が確定したグループのみ実名化） =====
+   "A組1位"/"A組2位" → 該当グループ全試合終了時に実チーム名へ。
+   "3位"(ベスト8の3位) / "[n]勝者" / "未定" 等は確定前なので未解決のまま。 */
+function groupDecided(g){
+  const st=computeStandings(g);
+  return st.length===4 && st.every(t=>t.p>=3);   // 全4チームが3試合消化＝確定
+}
+function resolveSlot(token){
+  const m=String(token).match(/^([A-L])組([12])位$/);
+  if(m && groupDecided(m[1])){
+    const st=computeStandings(m[1]); const t=st[(+m[2])-1];
+    return t ? t.team : null;
+  }
+  return null;
+}
+// 決勝Tスロットの表示HTML（解決済み=旗+国名 / 未解決=プレースホルダ薄字）
+function koSlot(token){
+  const t=resolveSlot(token);
+  if(t) return `<span class="ko-team"><img class="ko-fl" src="${flag(t)}" alt="">${dispName(t)}</span>`;
+  return `<span class="ko-ph">${token}</span>`;
+}
+
 /* ===== 順位表（1グループ） ===== */
 function standingsTable(g){
   const arr=computeStandings(g), teams=GROUPS[g];

@@ -7,7 +7,7 @@
 <meta name="description" content="2026年W杯 全12グループの順位表と決勝トーナメント表。48チームのグループステージを確認。">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=15">
+<link rel="stylesheet" href="styles.css?v=16">
 <style>
   .lead{font-size:13.5px;color:var(--muted);max-width:680px;line-height:1.8;margin:0 0 6px}
   .teams-link{display:inline-flex;margin:10px 0 4px}
@@ -48,6 +48,11 @@
   .ko-when{font-size:10.5px;color:var(--faint);flex:none;width:108px}
   .ko-teams{display:flex;align-items:center;gap:7px;font-weight:700}
   .ko-teams .vs{font-family:"Space Mono";font-size:11px;color:var(--faint)}
+  .ko-team{display:inline-flex;align-items:center;gap:6px;min-width:0}
+  .ko-team .ko-fl{width:18px;height:13px;object-fit:cover;border-radius:2px;flex:none}
+  .ko-fl{width:18px;height:13px;object-fit:cover;border-radius:2px;flex:none;vertical-align:-1px;margin-right:5px}
+  .ko-ph{color:var(--faint)}
+  .bslot .row .ko-team{font-weight:700}
   @media(max-width:760px){.grid12,.ko-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -84,8 +89,8 @@
 
 <div id="chrome-footer"></div>
 
-<script src="data.js?v=15"></script>
-<script src="app.js?v=15"></script>
+<script src="data.js?v=16"></script>
+<script src="app.js?v=16"></script>
 <script>
   buildChrome("standings");
 
@@ -110,7 +115,7 @@
       const cells=list.map(m=>{
         return `<a class="ko-match${isFinal?' final':''}" href="#">
           <span class="ko-when">${m.d} ${m.time}<br>${m.v}</span>
-          <span class="ko-teams">${m.a}<span class="vs">vs</span>${m.b}${isFinal?' 🏆':''}</span></a>`;
+          <span class="ko-teams">${koSlot(m.a)}<span class="vs">vs</span>${koSlot(m.b)}${isFinal?' 🏆':''}</span></a>`;
       }).join("");
       html+=`<div class="ko-round"><div class="ko-head"><span class="rt">${shortN[round]}</span><span class="rn">${round}</span><span class="cnt">${list.length}試合</span></div><div class="ko-grid">${cells}</div></div>`;
     }
@@ -127,8 +132,8 @@
       ["FINAL",KO["決勝"]],
     ];
     const slot=(m,fin)=>`<div class="bslot${fin?' fin':''}">
-        <div class="row"><span>${m.a}</span></div>
-        <div class="row"><span>${m.b}${fin?' 🏆':''}</span></div>
+        <div class="row">${koSlot(m.a)}</div>
+        <div class="row">${koSlot(m.b)}${fin?' 🏆':''}</div>
         <div class="meta">${m.d} ${m.time} · ${m.v}</div></div>`;
     let html='<p class="bracket-hint">← 横スクロールでラウンド32〜決勝まで →</p><div class="bracket">';
     cols.forEach(([name,list],ci)=>{
@@ -140,7 +145,7 @@
     // 3位決定戦
     const t=KO["3位決定戦"][0];
     html+=`<div style="margin-top:14px"><div class="ko-head"><span class="rt">3RD</span><span class="rn">3位決定戦</span></div>
-      <div class="ko-grid"><a class="ko-match" href="#"><span class="ko-when">${t.d} ${t.time}<br>${t.v}</span><span class="ko-teams">${t.a}<span class="vs">vs</span>${t.b}</span></a></div></div>`;
+      <div class="ko-grid"><a class="ko-match" href="#"><span class="ko-when">${t.d} ${t.time}<br>${t.v}</span><span class="ko-teams">${koSlot(t.a)}<span class="vs">vs</span>${koSlot(t.b)}</span></a></div></div>`;
     document.getElementById("ko-bracket").innerHTML=html;
   })();
 
