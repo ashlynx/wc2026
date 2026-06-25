@@ -7,7 +7,7 @@
 <meta name="description" content="2026年W杯 全12グループの順位表と決勝トーナメント表。48チームのグループステージを確認。">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=16">
+<link rel="stylesheet" href="styles.css?v=17">
 <style>
   .lead{font-size:13.5px;color:var(--muted);max-width:680px;line-height:1.8;margin:0 0 6px}
   .teams-link{display:inline-flex;margin:10px 0 4px}
@@ -89,8 +89,8 @@
 
 <div id="chrome-footer"></div>
 
-<script src="data.js?v=16"></script>
-<script src="app.js?v=16"></script>
+<script src="data.js?v=17"></script>
+<script src="app.js?v=17"></script>
 <script>
   buildChrome("standings");
 
@@ -103,11 +103,13 @@
       const t=new Date(LIVE_UPDATED).toLocaleString("ja-JP",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"});
       document.getElementById("lastup").textContent="最終更新 "+t;
     }
+    renderKOList();
+    renderKOBracket();
   }
   bootstrap(render);
 
   // 決勝T: 試合一覧ビュー
-  (function(){
+  function renderKOList(){
     let html="";
     const shortN={"ラウンド32":"ROUND 32","ラウンド16":"ROUND 16","準々決勝":"QF","準決勝":"SF","3位決定戦":"3RD","決勝":"FINAL"};
     for(const [round,list] of Object.entries(KO)){
@@ -120,10 +122,10 @@
       html+=`<div class="ko-round"><div class="ko-head"><span class="rt">${shortN[round]}</span><span class="rn">${round}</span><span class="cnt">${list.length}試合</span></div><div class="ko-grid">${cells}</div></div>`;
     }
     document.getElementById("ko-list").innerHTML=html;
-  })();
+  }
 
   // 決勝T: 組み合わせ表（ブラケット）ビュー
-  (function(){
+  function renderKOBracket(){
     const cols=[
       ["ROUND 32",KO["ラウンド32"]],
       ["ROUND 16",KO["ラウンド16"]],
@@ -147,7 +149,7 @@
     html+=`<div style="margin-top:14px"><div class="ko-head"><span class="rt">3RD</span><span class="rn">3位決定戦</span></div>
       <div class="ko-grid"><a class="ko-match" href="#"><span class="ko-when">${t.d} ${t.time}<br>${t.v}</span><span class="ko-teams">${koSlot(t.a)}<span class="vs">vs</span>${koSlot(t.b)}</span></a></div></div>`;
     document.getElementById("ko-bracket").innerHTML=html;
-  })();
+  }
 
   // タブ切り替え
   document.querySelectorAll("#ko-tabs .ko-tab").forEach(btn=>btn.onclick=()=>{
