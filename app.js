@@ -43,6 +43,7 @@ function buildChrome(active){
     ["schedule.html","全試合日程","schedule"],
     ["japan.html","日本代表","japan"],
     ["standings.html","順位表","standings"],
+    ["standings.html#ko","決勝T","ko"],
     ["third-place.html","3位争い","third"],
     ["watch-guide.html","視聴診断","watch"]
   ];
