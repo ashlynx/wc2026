@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3位チーム争い・ベスト8圏｜PITCH26</title>
+<meta name="description" content="2026年W杯 48カ国新方式。各グループ3位のうち成績上位8チームが決勝トーナメント（ラウンド32）に進出。現段階の順位でリアルタイムに進出圏を表示。">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=18">
+<style>
+  .lead{font-size:13.5px;color:var(--muted);max-width:680px;line-height:1.8;margin:0 0 14px}
+  .tp-status{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 14px;margin-bottom:16px}
+  .tp-status .dot{width:8px;height:8px;border-radius:99px;background:var(--accent)}
+  .tp-status.done .dot{background:var(--mint)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin:6px 0 16px;font-size:12px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:7px}
+  .legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+  .lg-q{background:var(--mint)}.lg-o{background:transparent;border:1px solid var(--faint)}
+  .tp-wrap{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  table.tp{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.tp th,table.tp td{padding:11px 8px;text-align:center;white-space:nowrap}
+  table.tp th{font-family:"Saira Condensed";font-weight:700;letter-spacing:.06em;font-size:11.5px;color:var(--muted);border-bottom:1px solid var(--line);background:var(--bg-2,rgba(255,255,255,.02))}
+  table.tp td{border-bottom:1px solid var(--line)}
+  table.tp td.rk{font-family:"Space Mono";font-weight:700;color:var(--faint);width:34px}
+  table.tp td.pts{font-weight:800}
+  table.tp tr.q td.rk{color:var(--mint)}
+  table.tp tr.q{background:linear-gradient(90deg,rgba(34,211,160,.10),transparent 60%)}
+  table.tp tr.out{opacity:.5}
+  .tp-team{display:inline-flex;align-items:center;gap:8px;justify-content:flex-start;min-width:0}
+  .tp-team img{width:22px;height:16px;object-fit:cover;border-radius:2px;flex:none}
+  .tp-team .jpn{color:var(--rose,#f7768e);font-weight:800}
+  .tp-team>span:not(.gtag):not(.prov-tag){overflow:hidden;text-overflow:ellipsis}
+  .gtag{font-family:"Saira Condensed";font-weight:800;font-size:11px;color:var(--accent);border:1px solid var(--line);border-radius:5px;padding:1px 6px;flex:none}
+  .prov-tag{font-size:8.5px;font-weight:800;letter-spacing:.04em;color:var(--accent);border:1px solid rgba(255,180,46,.5);border-radius:4px;padding:1px 3px;margin-left:2px;white-space:nowrap}
+  td.team-cell{text-align:left}
+  tr.cutline td{background:rgba(255,180,46,.08);color:var(--accent);font-weight:700;font-size:11.5px;letter-spacing:.04em;padding:7px 10px;text-align:center}
+  .note{font-size:12.5px;color:var(--muted);line-height:1.85;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:18px}
+  .backlink{display:inline-flex;margin:18px 0 4px}
+  .upd{font-size:11.5px;color:var(--faint);margin:10px 0 0;text-align:right}
+  @media(max-width:600px){
+    table.tp th.hide-sp,table.tp td.hide-sp{display:none}
+    .tp-team img{width:20px;height:14px}
+  }
+</style>
+</head>
+<body>
+<div id="chrome-header"></div>
+
+<main class="wrap">
+  <div class="page-head"><span class="kicker">3RD PLACE RACE</span><h1>3位争い・ベスト8圏</h1><p class="sub">12グループ3位 → 上位8チームが進出</p></div>
+  <p class="lead">48カ国の新方式では、各グループ3位の12チームのうち<b>成績上位8チーム</b>が決勝トーナメント（ラウンド32）に進出します。下表は現段階の順位での暫定ランキング。勝点 → 得失点差 → 総得点の順で比較します。</p>
+
+  <div class="tp-status" id="tp-status"><span class="dot"></span><span id="tp-status-txt">集計中…</span></div>
+
+  <div class="legend">
+    <span><i class="lg-q"></i>1〜8位 — 決勝T進出圏</span>
+    <span><i class="lg-o"></i>9〜12位 — 敗退ライン</span>
+  </div>
+
+  <div class="tp-wrap">
+    <table class="tp">
+      <thead><tr>
+        <th>#</th><th style="text-align:left">チーム</th>
+        <th>試</th><th class="hide-sp">勝</th><th class="hide-sp">分</th><th class="hide-sp">負</th>
+        <th>得失</th><th class="hide-sp">得点</th><th>勝点</th>
+      </tr></thead>
+      <tbody id="tp-body"></tbody>
+    </table>
+  </div>
+  <div class="upd" id="tp-upd"></div>
+
+  <a href="standings.html" class="backlink"><span class="btn ghost">← 順位表・決勝トーナメント表へ</span></a>
+
+  <div class="note">3位チームの進出枠は、12グループの3位同士を勝点→得失点差→総得点→（規定により）フェアプレーポイント等で比較し、上位8チームが決まります。本ページはグループステージ進行中のため<b>暫定</b>表示で、結果が入るたび自動更新されます。どの3位がラウンド32のどの試合に入るか（組み合わせ）はFIFA規定の割当表で決定され、全グループ終了後に確定します。</div>
+
+  <section id="howto"></section>
+</main>
+
+<div id="chrome-footer"></div>
+
+<script src="data.js?v=18"></script>
+<script src="app.js?v=18"></script>
+<script>
+  buildChrome("third");
+
+  function render(){
+    const rows=thirdPlaceRanking();
+    let html="";
+    rows.forEach((r,i)=>{
+      const rank=i+1, qual=rank<=8;
+      html+=`<tr class="${qual?'q':'out'}">
+        <td class="rk">${rank}</td>
+        <td class="team-cell"><span class="tp-team"><span class="gtag">${r.g}</span><img src="${flag(r.team)}" alt=""><span${r.team==="日本"?' class="jpn"':''}>${dispName(r.team)}</span>${r.gpDecided?'':'<span class="prov-tag">暫定</span>'}</span></td>
+        <td>${r.p}</td><td class="hide-sp">${r.w}</td><td class="hide-sp">${r.d}</td><td class="hide-sp">${r.l}</td>
+        <td>${gdFmt(r.gd)}</td><td class="hide-sp">${r.gf}</td><td class="pts">${r.pts}</td></tr>`;
+      if(rank===8 && rows.length>8){
+        html+=`<tr class="cutline"><td colspan="9">▲ ここまで進出（ベスト8の3位）　／　▼ 敗退ライン ▼</td></tr>`;
+      }
+    });
+    if(!rows.length) html=`<tr><td colspan="9" style="padding:24px;color:var(--faint)">グループステージ開始後に表示されます。</td></tr>`;
+    document.getElementById("tp-body").innerHTML=html;
+
+    // ステータス
+    const allDone=allGroupsDecided();
+    const st=document.getElementById("tp-status");
+    const decided=Object.keys(GROUPS).filter(g=>typeof groupDecided==="function"&&groupDecided(g)).length;
+    st.classList.toggle("done",allDone);
+    document.getElementById("tp-status-txt").textContent =
+      allDone ? "確定：8チームの進出が決定" : `暫定（${decided}/12グループ確定）・残り試合で変動します`;
+
+    if(LIVE_UPDATED){
+      const t=new Date(LIVE_UPDATED).toLocaleString("ja-JP",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"});
+      document.getElementById("tp-upd").textContent="最終更新 "+t+"（自動更新）";
+    }
+  }
+  bootstrap(render, 60000);
+
+  document.getElementById("howto").innerHTML=howToWatch();
+</script>
+</body>
+</html>

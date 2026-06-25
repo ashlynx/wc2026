@@ -43,6 +43,7 @@ function buildChrome(active){
     ["schedule.html","全試合日程","schedule"],
     ["japan.html","日本代表","japan"],
     ["standings.html","順位表","standings"],
+    ["third-place.html","3位争い","third"],
     ["watch-guide.html","視聴診断","watch"]
   ];
   const links = nav.map(([h,t,k])=>`<a href="${h}"${k===active?' class="on"':''}>${t}</a>`).join("");
@@ -140,7 +141,10 @@ async function loadLive(){
   }catch(e){ /* JSONが無ければ data.js の静的データにフォールバック */ }
 }
 // ライブ取得 → 描画。各ページは render 関数を渡す。
-function bootstrap(render){ loadLive().then(render).catch(render); }
+function bootstrap(render, pollMs){
+  loadLive().then(render).catch(render);
+  if(pollMs) setInterval(()=>loadLive().then(render).catch(()=>{}), pollMs);
+}
 
 /* ===== 試合日時・次の試合・ヒーロー ===== */
 function matchDT(m){
@@ -199,25 +203,46 @@ function computeStandings(g){
 }
 function gdFmt(n){return n>0?("+"+n):(""+n);}
 
-/* ===== 決勝T: スロット解決（順位が確定したグループのみ実名化） =====
-   "A組1位"/"A組2位" → 該当グループ全試合終了時に実チーム名へ。
-   "3位"(ベスト8の3位) / "[n]勝者" / "未定" 等は確定前なので未解決のまま。 */
+/* ===== 決勝T: スロット解決（現段階の順位で実名化。未消化は暫定扱い） =====
+   "A組1位"/"A組2位" → 試合開始済みグループの現順位から解決。
+   全試合終了で「確定」、途中は「暫定」マーク付き。
+   "3位"(ベスト8) / "[n]勝者" / "未定" 等は解決しない（3位はthird-place.html参照）。 */
+function groupStarted(g){ return computeStandings(g).some(t=>t.p>0); }
 function groupDecided(g){
   const st=computeStandings(g);
   return st.length===4 && st.every(t=>t.p>=3);   // 全4チームが3試合消化＝確定
 }
 function resolveSlot(token){
   const m=String(token).match(/^([A-L])組([12])位$/);
-  if(m && groupDecided(m[1])){
+  if(m && groupStarted(m[1])){
     const st=computeStandings(m[1]); const t=st[(+m[2])-1];
     return t ? t.team : null;
   }
   return null;
 }
+// スロットが暫定（グループ未消化）か
+function slotProvisional(token){
+  const m=String(token).match(/^([A-L])組([12])位$/);
+  return !!(m && groupStarted(m[1]) && !groupDecided(m[1]));
+}
+/* ベスト8: 各グループ3位を現順位で抽出しランク付け（勝点→得失→総得点） */
+function thirdPlaceRanking(){
+  const rows=[];
+  for(const g of Object.keys(GROUPS)){
+    const st=computeStandings(g);
+    if(st.length>=3) rows.push({g, ...st[2], gpDecided:groupDecided(g), gpStarted:st.some(t=>t.p>0)});
+  }
+  rows.sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf);
+  return rows;
+}
+function allGroupsDecided(){ return Object.keys(GROUPS).every(groupDecided); }
 // 決勝Tスロットの表示HTML（解決済み=旗+国名 / 未解決=プレースホルダ薄字）
 function koSlot(token){
   const t=resolveSlot(token);
-  if(t) return `<span class="ko-team"><img class="ko-fl" src="${flag(t)}" alt="">${dispName(t)}</span>`;
+  if(t){
+    const prov=slotProvisional(token);
+    return `<span class="ko-team${prov?' prov':''}"><img class="ko-fl" src="${flag(t)}" alt="">${dispName(t)}${prov?'<span class="prov-tag">暫定</span>':''}</span>`;
+  }
   return `<span class="ko-ph">${token}</span>`;
 }
 
