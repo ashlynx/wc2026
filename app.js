@@ -236,6 +236,42 @@ function thirdPlaceRanking(){
   return rows;
 }
 function allGroupsDecided(){ return Object.keys(GROUPS).every(groupDecided); }
+
+/* ===== 決勝T: 3位枠の解決（FIFA公式割当表 THIRD_ALLOC を使用） =====
+   勝者グループ(A/B/D/E/G/I/K/L)に対し、現在の上位8・3位の組み合わせから
+   割り当てられる3位グループを引き、その3位チームを返す。 */
+function resolveThirdFor(winnerG){
+  if(typeof THIRD_ALLOC==="undefined" || typeof KO_WINSLOTS==="undefined") return null;
+  const idx=KO_WINSLOTS.indexOf(winnerG); if(idx<0) return null;
+  const rank=thirdPlaceRanking();
+  if(rank.length<12 || !rank.every(r=>r.gpStarted)) return null;   // 全12組の3位が出揃ってから
+  const combo=rank.slice(0,8).map(r=>r.g).sort().join("");
+  const val=THIRD_ALLOC[combo]; if(!val) return null;
+  const thirdG=val[idx];
+  const st=computeStandings(thirdG);
+  return st[2] ? {team:st[2].team, g:thirdG} : null;
+}
+// 3位スロットの表示HTML（全グループ確定までは暫定）
+function koThirdSlot(winnerG){
+  const r=resolveThirdFor(winnerG);
+  if(r){
+    const prov=!allGroupsDecided();
+    return `<span class="ko-team${prov?' prov':''}"><img class="ko-fl" src="${flag(r.team)}" alt="">${dispName(r.team)}<span class="g3">3${r.g}</span>${prov?'<span class="prov-tag">暫定</span>':''}</span>`;
+  }
+  return `<span class="ko-ph">3位</span>`;
+}
+// 対戦の片側を解決（相手が「X組1位」かつ自分が「3位」なら割当表で解決）→ HTML
+function koSideHtml(side, other){
+  const w=String(other).match(/^([A-L])組1位$/);
+  if(side==="3位" && w) return koThirdSlot(w[1]);
+  return koSlot(side);
+}
+// 同上 → チーム名（schedule等のmatchRow用。解決不可ならトークンのまま）
+function koSideName(side, other){
+  const w=String(other).match(/^([A-L])組1位$/);
+  if(side==="3位" && w){ const r=resolveThirdFor(w[1]); return r?r.team:side; }
+  return resolveSlot(side)||side;
+}
 // 決勝Tスロットの表示HTML（解決済み=旗+国名 / 未解決=プレースホルダ薄字）
 function koSlot(token){
   const t=resolveSlot(token);
